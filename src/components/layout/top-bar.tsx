@@ -8,7 +8,7 @@ import { currentStateName } from '@/lib/state'
  */
 export function TopBar() {
   return (
-    <header className="sticky top-0 z-30 border-b border-border bg-white">
+    <header className="border-b border-border bg-white">
       <div className="mx-auto flex max-w-[960px] items-center gap-4 px-5 py-3">
         <img
           src="/teegle-golf-logo.png"

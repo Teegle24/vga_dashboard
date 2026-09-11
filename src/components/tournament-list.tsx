@@ -110,7 +110,7 @@ export function TournamentList({ events }: { events: EventRecord[] }) {
     return (
       <Card>
         <p className="text-base text-ink-soft">
-          No events coming up. Log one above and it will show here.
+          No events coming up. Open Courses, tap a course, and log one there.
         </p>
       </Card>
     )
