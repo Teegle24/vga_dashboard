@@ -54,12 +54,12 @@ export function Sidebar({
             className="size-9 shrink-0 object-contain"
           />
           <div className="h-7 w-px shrink-0 bg-border" aria-hidden />
-          <IdahoMark className="h-9 w-auto shrink-0" />
+          <IdahoMark className="h-11 w-auto shrink-0" />
         </div>
         <p className="mt-4 font-display text-xl font-semibold tracking-tight">
           VGA Idaho
         </p>
-        <p className="text-sm text-white/65">Stroke play · Tournament desk</p>
+        <p className="text-sm text-white/65">Tournament desk</p>
       </div>
 
       <nav aria-label="Desk" className="grid gap-1.5 p-3 sm:grid-cols-2 lg:grid-cols-1 lg:flex-1">

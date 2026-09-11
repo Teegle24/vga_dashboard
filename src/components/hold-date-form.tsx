@@ -38,7 +38,7 @@ export function HoldDateForm({
     hold.mutate(
       {
         courseId: course.id,
-        name: name.trim() || 'VGA Stroke Play',
+        name: name.trim() || 'VGA Tournament',
         eventDate,
         headcount: players,
         rateQuoted: rateQuoted ? Number(rateQuoted) : null,
@@ -67,7 +67,7 @@ export function HoldDateForm({
     <div className="grid gap-4">
       <p className="text-base text-ink-soft">
         Call {course.contact.contactName ?? 'the course'}, then record the date
-        and tee times they will hold for a stroke-play field.
+        and tee times they will hold for the field.
       </p>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -79,7 +79,7 @@ export function HoldDateForm({
         />
         <TextField
           label="Tournament name"
-          hint="Optional — defaults to VGA Stroke Play"
+          hint="Optional — defaults to VGA Tournament"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Idaho State Championship"

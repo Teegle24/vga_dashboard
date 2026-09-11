@@ -2,7 +2,7 @@ import type { EventRecord, TeeGroup } from '@/types'
 import { formatDate } from '@/lib/dates'
 
 /**
- * Stroke-play tee sheet: foursomes off the first tee at a regular interval.
+ * Tee sheet: foursomes off the first tee at a regular interval.
  * VGA does not play scramble or shotgun starts.
  */
 
@@ -67,7 +67,6 @@ export function downloadTeeSheet(event: EventRecord) {
   )
   const lines: string[] = [
     `${event.name} — Veteran Golfers Association, Idaho`,
-    'Stroke play',
     event.courseName,
     formatDate(event.eventDate),
     `Players listed: ${filled || event.headcount || 0}`,

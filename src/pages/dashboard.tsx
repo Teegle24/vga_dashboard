@@ -80,7 +80,7 @@ export function Dashboard() {
             <section>
               <SectionHeading
                 title="Tournaments"
-                description="Stroke play only. Hold the times, build the tee sheet, then alert the field 3–5 days out."
+                description="Hold the times, build the tee sheet, then alert the field 3–5 days out."
               />
               <TournamentList
                 events={data?.events ?? []}

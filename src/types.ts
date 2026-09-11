@@ -6,7 +6,7 @@ export type StateCode = 'ID'
 export type DataSource = 'manual' | 'sample'
 
 /**
- * Where a stroke-play tournament sits in the director's job:
+ * Where a tournament sits in the director's job:
  * call the course, hold the times, confirm the field, then it's played.
  */
 export type TournamentStatus = 'reaching_out' | 'held' | 'confirmed' | 'complete'

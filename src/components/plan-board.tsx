@@ -31,7 +31,7 @@ export function PlanBoard({
     <div className="grid gap-8">
       <div>
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-gold">
-          VGA Idaho · Stroke play only
+          VGA Idaho
         </p>
         <h2 className="mt-2 font-display text-4xl font-semibold text-ink">
           Hold the date. Build the sheet. Alert the field.

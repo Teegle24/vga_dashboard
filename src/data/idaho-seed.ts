@@ -265,7 +265,7 @@ export const COURSE_SEEDS: CourseSeed[] = [
 ]
 
 export const EVENT_SEEDS: EventSeed[] = [
-  // Past stroke-play tournaments. These are what make rate history visible.
+  // Past tournaments. These are what make rate history visible.
   {
     courseSlug: 'warm-springs-golf-course',
     name: 'Spring Kickoff',

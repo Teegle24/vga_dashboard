@@ -49,7 +49,7 @@ export function TeeSheetBuilder({ event }: { event: EventRecord }) {
   return (
     <div className="grid gap-4">
       <p className="text-base text-ink-soft">
-        Stroke play, foursomes off the first tee. Names can stay blank until
+        Foursomes off the first tee. Names can stay blank until
         the roster is set in Golf Genius — then download and email the course.
       </p>
 

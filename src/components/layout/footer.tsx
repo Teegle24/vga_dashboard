@@ -125,7 +125,7 @@ export function Footer({ data }: { data?: DashboardData }) {
         </div>
 
         <p className="text-sm text-white/60">
-          Teegle Golf · Veteran Golfers Association, Idaho · Stroke play
+          Teegle Golf · Veteran Golfers Association, Idaho
         </p>
       </div>
     </footer>
