@@ -5,8 +5,8 @@ import {
   ScrollText,
   Users,
 } from 'lucide-react'
+import { IdahoMark } from '@/components/layout/idaho-mark'
 import { CURRENT_DIRECTOR } from '@/data/store'
-import { currentStateName } from '@/lib/state'
 import { cn } from '@/lib/utils'
 
 export type DashboardTab =
@@ -54,9 +54,7 @@ export function Sidebar({
             className="size-9 shrink-0 object-contain"
           />
           <div className="h-7 w-px shrink-0 bg-border" aria-hidden />
-          <p className="min-w-0 truncate text-base font-semibold text-ink">
-            {currentStateName()}
-          </p>
+          <IdahoMark className="h-9 w-auto shrink-0" />
         </div>
         <p className="mt-4 font-display text-xl font-semibold tracking-tight">
           VGA Idaho

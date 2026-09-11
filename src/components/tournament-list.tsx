@@ -41,7 +41,7 @@ function TournamentCard({
   startOpen?: boolean
 }) {
   const [sheetOpen, setSheetOpen] = useState(Boolean(startOpen))
-  const [rosterOpen, setRosterOpen] = useState(true)
+  const [rosterOpen, setRosterOpen] = useState(false)
   const patch = usePatchEvent()
   const past = isPast(event.eventDate)
   const highlight =
