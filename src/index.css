@@ -33,21 +33,21 @@
 :root {
   --radius: 0.4rem;
 
-  --forest: #12210c;
-  --forest-2: #1b3012;
-  --brand: #2b5910;
-  --brand-2: #3a7517;
-  --brand-soft: #e7efe0;
+  --forest: #1a2c16;
+  --forest-2: #243a1e;
+  --brand: #3a6a1c;
+  --brand-2: #4a7f26;
+  --brand-soft: rgba(43, 89, 16, 0.1);
   --gold: #c4a046;
-  --gold-soft: #f6eed6;
+  --gold-soft: rgba(196, 160, 70, 0.16);
 
-  --canvas: #efe6d4;
-  --card: #fffdf8;
-  --muted: #f3ead8;
+  --canvas: #f6f1e6;
+  --card: rgba(255, 253, 248, 0.58);
+  --muted: rgba(255, 255, 255, 0.38);
   --ink: #16140e;
   --ink-soft: #5c5646;
-  --border: #d4c6a8;
-  --input: #c4b592;
+  --border: rgba(122, 108, 78, 0.22);
+  --input: rgba(122, 108, 78, 0.28);
   --danger: #8c1d22;
 }
 
@@ -68,8 +68,8 @@ body {
   -webkit-font-smoothing: antialiased;
   background-color: var(--canvas);
   background-image:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(196, 160, 70, 0.12), transparent),
-    linear-gradient(180deg, #f3ead8 0%, #efe6d4 28%, #ebe2cf 100%);
+    radial-gradient(ellipse 70% 42% at 50% -8%, rgba(196, 160, 70, 0.08), transparent),
+    linear-gradient(180deg, #faf6ee 0%, #f6f1e6 40%, #f3ecdd 100%);
 }
 
 h1,

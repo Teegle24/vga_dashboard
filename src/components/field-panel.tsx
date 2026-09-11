@@ -10,6 +10,9 @@ import {
 } from '@/data/hooks'
 import { formatPhone, telHref } from '@/lib/format'
 
+const ACTION =
+  'flex size-11 shrink-0 items-center justify-center rounded-md text-ink-soft hover:bg-white/70'
+
 export function FieldPanel({
   eventId,
   spotsHeld,
@@ -40,7 +43,7 @@ export function FieldPanel({
   const over = spotsHeld != null && players.length > spotsHeld
 
   return (
-    <div className="grid gap-4 rounded-lg border border-border bg-canvas p-4">
+    <div className="grid min-w-0 gap-4 rounded-lg border border-border bg-white/35 p-4">
       <h4 className="text-lg font-semibold text-ink">
         Current field
         <span className="ml-2 font-normal text-ink-soft">
@@ -48,6 +51,31 @@ export function FieldPanel({
           {spotsHeld != null ? ` of ${spotsHeld} held` : ''}
         </span>
       </h4>
+
+      <div className="grid gap-3">
+        <TextField
+          label="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Member name"
+        />
+        <TextField
+          label="Phone"
+          type="tel"
+          inputMode="tel"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder="Phone (optional)"
+        />
+        <Button
+          variant="secondary"
+          onClick={submit}
+          disabled={!name.trim() || add.isPending}
+        >
+          <Plus className="size-5" aria-hidden />
+          Add to field
+        </Button>
+      </div>
 
       {over ? (
         <p className="text-base text-ink">
@@ -60,37 +88,37 @@ export function FieldPanel({
         <p className="text-base text-ink-soft">Loading…</p>
       ) : players.length === 0 ? (
         <p className="text-base text-ink-soft">
-          Nobody on the field yet. Add the first player below.
+          Nobody on the field yet. Add the first player above.
         </p>
       ) : (
         <ol className="grid gap-2">
           {players.map((player, index) => (
             <li
               key={player.id}
-              className="flex flex-wrap items-center gap-3 rounded-md bg-card px-3 py-3"
+              className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 rounded-md bg-white/50 px-2.5 py-2"
             >
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-soft text-base font-semibold text-brand">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-soft text-sm font-semibold text-brand">
                 {index + 1}
               </span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-lg font-medium text-ink">
+              <span className="min-w-0">
+                <span className="block truncate text-base font-medium text-ink">
                   {player.memberName}
                 </span>
                 {player.phone ? (
                   <a
                     href={telHref(player.phone) ?? undefined}
-                    className="block text-base text-brand underline-offset-2 hover:underline"
+                    className="block truncate text-sm text-brand underline-offset-2 hover:underline"
                   >
                     {formatPhone(player.phone)}
                   </a>
                 ) : null}
               </span>
-              <span className="flex shrink-0 items-center gap-1">
+              <span className="flex shrink-0 items-center">
                 <button
                   type="button"
                   aria-label={`Move ${player.memberName} to standby`}
                   onClick={() => toStandby.mutate(player.id)}
-                  className="flex size-12 items-center justify-center rounded-md text-ink-soft hover:bg-muted"
+                  className={ACTION}
                 >
                   <UserMinus className="size-5" aria-hidden />
                 </button>
@@ -98,7 +126,7 @@ export function FieldPanel({
                   type="button"
                   aria-label={`Remove ${player.memberName}`}
                   onClick={() => remove.mutate(player.id)}
-                  className="flex size-12 items-center justify-center rounded-md text-ink-soft hover:bg-muted"
+                  className={ACTION}
                 >
                   <Trash2 className="size-5" aria-hidden />
                 </button>
@@ -107,32 +135,6 @@ export function FieldPanel({
           ))}
         </ol>
       )}
-
-      <div className="grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
-        <TextField
-          label="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Member name"
-        />
-        <TextField
-          label="Phone"
-          hint="Optional"
-          type="tel"
-          inputMode="tel"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          placeholder="208-555-0100"
-        />
-        <Button
-          variant="secondary"
-          onClick={submit}
-          disabled={!name.trim() || add.isPending}
-        >
-          <Plus className="size-5" aria-hidden />
-          Add to field
-        </Button>
-      </div>
     </div>
   )
 }

@@ -200,7 +200,7 @@ function ActionRow({
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full items-start gap-4 rounded-lg border border-gold bg-gold-soft px-5 py-4 text-left hover:bg-card"
+      className="flex w-full items-start gap-4 rounded-lg border border-gold/40 bg-gold-soft px-5 py-4 text-left hover:bg-white/50"
     >
       <span className="mt-0.5 text-brand" aria-hidden>
         {icon}

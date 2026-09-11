@@ -129,7 +129,7 @@ export function MembersDirectory({
           placeholder="Type a name or town"
           aria-label="Find a member"
           className={cn(
-            'w-full min-h-16 rounded-lg border border-input bg-white text-lg text-ink',
+            'w-full min-h-16 rounded-lg border border-input bg-white/70 text-lg text-ink',
             'placeholder:text-ink-soft/70 focus:border-brand',
           )}
           style={{ paddingLeft: '3.25rem', paddingRight: '3.25rem' }}

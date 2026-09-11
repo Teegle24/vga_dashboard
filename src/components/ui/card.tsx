@@ -11,7 +11,7 @@ export function Card({
   return (
     <div
       className={cn(
-        'rounded-lg border border-border bg-card p-6 shadow-[0_1px_0_rgba(18,33,12,0.04),0_18px_40px_-24px_rgba(18,33,12,0.35)]',
+        'rounded-lg border border-border bg-card p-6 backdrop-blur-[2px] shadow-[0_1px_0_rgba(18,33,12,0.03),0_14px_32px_-28px_rgba(18,33,12,0.2)]',
         className,
       )}
     >

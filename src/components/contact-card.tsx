@@ -115,7 +115,7 @@ export function ContactCard({ course }: { course: Course }) {
       </div>
 
       {/* Course Contact */}
-      <div className="rounded-lg border border-border bg-canvas p-4">
+      <div className="rounded-lg border border-border bg-white/35 p-4">
         <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
           <h4 className="text-lg font-semibold text-ink">Course Contact</h4>
           {hasContact ? (
@@ -260,7 +260,7 @@ export function ContactCard({ course }: { course: Course }) {
       </div>
 
       {/* Rates */}
-      <div className="grid gap-4 rounded-lg border border-border bg-canvas p-4 sm:grid-cols-3">
+      <div className="grid gap-4 rounded-lg border border-border bg-white/35 p-4 sm:grid-cols-3">
         <div>
           <p className="text-sm text-ink-soft">List rate</p>
           <p className="text-xl font-semibold text-ink">

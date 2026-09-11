@@ -38,7 +38,7 @@ export function Sidebar({
   noticeCount?: number
 }) {
   return (
-    <aside className="bg-forest text-white lg:flex lg:h-dvh lg:w-72 lg:shrink-0 lg:flex-col lg:sticky lg:top-0">
+    <aside className="bg-forest/92 text-white lg:flex lg:h-dvh lg:w-72 lg:shrink-0 lg:flex-col lg:sticky lg:top-0">
       <div className="border-b border-white/10 px-5 py-4">
         <div className="flex items-center gap-3 rounded-md bg-white px-2.5 py-1.5">
           <img
@@ -73,7 +73,7 @@ export function Sidebar({
               className={cn(
                 'flex min-h-16 items-center gap-3 rounded-md px-3 text-left',
                 selected
-                  ? 'bg-gold text-forest'
+                  ? 'bg-gold/88 text-forest'
                   : 'text-white/90 hover:bg-white/10',
               )}
             >

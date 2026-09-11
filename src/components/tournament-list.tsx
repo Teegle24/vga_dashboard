@@ -166,8 +166,12 @@ function TournamentCard({
 
       {rosterOpen ? (
         <div className="grid gap-4 border-t border-border p-5 lg:grid-cols-2">
-          <FieldPanel eventId={event.id} spotsHeld={event.headcount} />
-          <WaitlistPanel eventId={event.id} />
+          <div className="min-w-0">
+            <FieldPanel eventId={event.id} spotsHeld={event.headcount} />
+          </div>
+          <div className="min-w-0">
+            <WaitlistPanel eventId={event.id} />
+          </div>
         </div>
       ) : null}
     </Card>
