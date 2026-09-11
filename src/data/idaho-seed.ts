@@ -1,11 +1,11 @@
 /**
- * Demo seed data, shared by the browser mock fixtures and the Supabase seed
- * script so there is exactly one list to maintain.
+ * The Idaho course list the demo starts from. Replace this file when the real
+ * course data arrives — nothing else needs to change.
  *
  * Course names and cities are real Idaho courses so Mark recognizes the list.
  * Everything else is invented: phone numbers use the reserved 555-01xx range,
  * and contacts and events are made up. The UI labels this as sample data, and
- * `npm run seed:purge` removes all of it.
+ * "Start over with sample data" in the footer restores it.
  */
 
 export interface CourseSeed {

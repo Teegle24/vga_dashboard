@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { MessageSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { TextAreaField } from '@/components/ui/field'
-import { useSendFeedback } from '@/api/hooks'
+import { useSendFeedback } from '@/data/hooks'
 
 /**
  * The whole point of this demo is Mark's feedback. Capturing it in place beats

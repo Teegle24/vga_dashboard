@@ -7,7 +7,7 @@ import {
   usePatchWaitlistEntry,
   useRemoveWaitlistEntry,
   useWaitlist,
-} from '@/api/hooks'
+} from '@/data/hooks'
 import { formatPhone, telHref } from '@/lib/format'
 
 /**

@@ -1,5 +1,5 @@
 import { Search, X } from 'lucide-react'
-import type { Course } from '@shared/types'
+import type { Course } from '@/types'
 import { cn } from '@/lib/utils'
 import { formatPhone } from '@/lib/format'
 

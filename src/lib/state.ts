@@ -1,4 +1,4 @@
-import type { StateCode } from '@shared/types'
+import type { StateCode } from '@/types'
 
 /**
  * The demo is Idaho-only, but nothing hardcodes 'ID' at the call site. When VGA

@@ -8,4 +8,4 @@ dist-ssr
 .vercel
 .DS_Store
 *.log
-data/
+*.tsbuildinfo

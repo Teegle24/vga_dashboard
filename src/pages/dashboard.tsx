@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { CalendarClock } from 'lucide-react'
-import { useDashboard } from '@/api/hooks'
+import { useDashboard } from '@/data/hooks'
 import { ContactCard } from '@/components/contact-card'
 import { CourseDirectory } from '@/components/course-directory'
 import { CourseSearch } from '@/components/course-search'

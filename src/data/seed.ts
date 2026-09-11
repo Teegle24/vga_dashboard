@@ -1,16 +1,16 @@
-import type { Course, DashboardData, EventRecord, WaitlistEntry } from '@shared/types'
+import type { Course, DashboardData, EventRecord, WaitlistEntry } from '@/types'
 import {
   COURSE_SEEDS,
   EVENT_SEEDS,
   WAITLIST_SEEDS,
   slugify,
-} from '@shared/idaho-seed'
+} from '@/data/idaho-seed'
 import { todayInIdaho } from '@/lib/dates'
 
 /**
- * Browser fixtures for mock mode, built from the shared Idaho seed list so they
- * match what `npm run seed:demo` writes to Supabase. Dates are relative to
- * today, which keeps the headcount reminder demonstrable on any day.
+ * The directory everyone starts from, built out of the Idaho seed list. Dates
+ * are relative to today, which keeps the headcount reminder demonstrable on any
+ * day you open the demo.
  */
 
 function day(offset: number): string {
@@ -33,7 +33,7 @@ const EMPTY_CONTACT = {
   updatedBy: null,
 }
 
-export const mockCourses: Course[] = COURSE_SEEDS.map((seed, index) => ({
+export const seedCourses: Course[] = COURSE_SEEDS.map((seed, index) => ({
   id: slugify(seed.name),
   name: seed.name,
   address: seed.address,
@@ -61,10 +61,10 @@ export const mockCourses: Course[] = COURSE_SEEDS.map((seed, index) => ({
 }))
 
 function courseName(slug: string) {
-  return mockCourses.find((c) => c.id === slug)?.name ?? 'Unknown course'
+  return seedCourses.find((c) => c.id === slug)?.name ?? 'Unknown course'
 }
 
-export const mockEvents: EventRecord[] = EVENT_SEEDS.map((seed, index) => ({
+export const seedEvents: EventRecord[] = EVENT_SEEDS.map((seed, index) => ({
   id: `evt-${index + 1}`,
   courseId: seed.courseSlug,
   courseName: courseName(seed.courseSlug),
@@ -84,9 +84,9 @@ export const mockEvents: EventRecord[] = EVENT_SEEDS.map((seed, index) => ({
   updatedAt: ago(Math.max(1, Math.abs(seed.offsetDays) - 2)),
 }))
 
-export const mockWaitlist: WaitlistEntry[] = WAITLIST_SEEDS.map(
+export const seedWaitlist: WaitlistEntry[] = WAITLIST_SEEDS.map(
   (seed, index) => {
-    const event = mockEvents.find((e) => e.name === seed.eventName)
+    const event = seedEvents.find((e) => e.name === seed.eventName)
     const priorForEvent = WAITLIST_SEEDS.slice(0, index).filter(
       (s) => s.eventName === seed.eventName,
     ).length
@@ -104,8 +104,8 @@ export const mockWaitlist: WaitlistEntry[] = WAITLIST_SEEDS.map(
 )
 
 /**
- * Rolls the newest rate paid onto each course, mirroring what the Postgres
- * trigger does so mock and live behave identically.
+ * Rolls the newest rate paid onto each course. Rate history is always derived
+ * from the event log, never typed in twice.
  */
 export function applyDerivedRates(
   courses: Course[],

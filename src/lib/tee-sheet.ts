@@ -1,4 +1,4 @@
-import type { EventRecord } from '@shared/types'
+import type { EventRecord } from '@/types'
 import { formatDate } from '@/lib/dates'
 
 /**

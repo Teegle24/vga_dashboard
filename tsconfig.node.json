@@ -6,20 +6,12 @@
     "skipLibCheck": true,
     "moduleResolution": "bundler",
     "types": ["node"],
-    "resolveJsonModule": true,
-    "allowImportingTsExtensions": true,
-    "jsx": "react-jsx",
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
     "strict": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "baseUrl": ".",
-    "paths": {
-      "@shared/*": ["./shared/*"],
-      "@server/*": ["./server/*"]
-    }
+    "noUnusedParameters": true
   },
-  "include": ["vite.config.ts", "server", "scripts", "api", "shared"]
+  "include": ["vite.config.ts"]
 }

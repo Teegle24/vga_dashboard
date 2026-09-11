@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Plus } from 'lucide-react'
-import type { Course } from '@shared/types'
+import type { Course } from '@/types'
 import { Button } from '@/components/ui/button'
 import { TextField } from '@/components/ui/field'
-import { useLogEvent } from '@/api/hooks'
+import { useLogEvent } from '@/data/hooks'
 import { todayInIdaho } from '@/lib/dates'
 
 /**

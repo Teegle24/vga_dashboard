@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Check, Mail, MapPin, Phone, Globe, Pencil } from 'lucide-react'
-import type { Course } from '@shared/types'
+import type { Course } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Pill } from '@/components/ui/card'
 import { TextAreaField, TextField } from '@/components/ui/field'
-import { useSaveContact } from '@/api/hooks'
+import { useSaveContact } from '@/data/hooks'
 import { daysUntil, describeUpdated, formatDate } from '@/lib/dates'
 import {
   displayUrl,

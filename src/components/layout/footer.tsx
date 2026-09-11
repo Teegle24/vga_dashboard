@@ -1,7 +1,10 @@
-import { Download } from 'lucide-react'
-import type { DashboardData } from '@shared/types'
+import { useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { Download, RotateCcw } from 'lucide-react'
+import type { DashboardData } from '@/types'
 import { Button } from '@/components/ui/button'
 import { FeedbackButton } from '@/components/feedback-button'
+import { resetDemoData } from '@/data/store'
 import { downloadCsv } from '@/lib/tee-sheet'
 
 function exportEverything(data: DashboardData) {
@@ -57,6 +60,47 @@ function exportEverything(data: DashboardData) {
   downloadCsv('vga-idaho-events.csv', eventRows)
 }
 
+/**
+ * Edits stick in the browser, so a walkthrough needs a way back to a clean
+ * slate. Two taps instead of a confirm dialog, same as everything else here.
+ */
+function StartOver() {
+  const [confirming, setConfirming] = useState(false)
+  const client = useQueryClient()
+
+  if (!confirming) {
+    return (
+      <Button variant="secondary" onClick={() => setConfirming(true)}>
+        <RotateCcw className="size-5" aria-hidden />
+        Start over
+      </Button>
+    )
+  }
+
+  return (
+    <div className="grid w-full gap-3 rounded-lg border border-border bg-muted p-4">
+      <p className="text-base text-ink">
+        This erases everything typed in so far and puts the sample data back.
+      </p>
+      <div className="flex flex-wrap gap-3">
+        <Button
+          variant="danger"
+          onClick={() => {
+            resetDemoData()
+            client.invalidateQueries()
+            setConfirming(false)
+          }}
+        >
+          Yes, start over
+        </Button>
+        <Button variant="secondary" onClick={() => setConfirming(false)}>
+          Keep my changes
+        </Button>
+      </div>
+    </div>
+  )
+}
+
 export function Footer({ data }: { data?: DashboardData }) {
   return (
     <footer className="mt-14 border-t border-border bg-white">
@@ -71,6 +115,7 @@ export function Footer({ data }: { data?: DashboardData }) {
             <Download className="size-5" aria-hidden />
             Download everything
           </Button>
+          <StartOver />
         </div>
 
         <p className="text-sm text-ink-soft">

@@ -1,6 +1,4 @@
-import { UserButton } from '@clerk/clerk-react'
-import { useSession } from '@/auth/session'
-import { isMockMode } from '@/lib/config'
+import { CURRENT_DIRECTOR } from '@/data/store'
 import { currentStateName } from '@/lib/state'
 
 /**
@@ -9,8 +7,6 @@ import { currentStateName } from '@/lib/state'
  * hides the edge.
  */
 export function TopBar() {
-  const { displayName } = useSession()
-
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-white">
       <div className="mx-auto flex max-w-[960px] items-center gap-4 px-5 py-3">
@@ -37,13 +33,9 @@ export function TopBar() {
         </div>
 
         <div className="ml-auto flex shrink-0 items-center gap-3">
-          {isMockMode() ? (
-            <span className="hidden text-base text-ink-soft sm:inline">
-              {displayName}
-            </span>
-          ) : (
-            <UserButton afterSignOutUrl="/sign-in" />
-          )}
+          <span className="hidden text-base text-ink-soft sm:inline">
+            {CURRENT_DIRECTOR}
+          </span>
         </div>
       </div>
     </header>

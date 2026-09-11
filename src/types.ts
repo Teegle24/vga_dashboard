@@ -1,12 +1,9 @@
-/**
- * Single source of truth for the SPA and the API. Both import from here so the
- * contract cannot drift.
- */
+/** The shape of everything in the directory. */
 
 export type StateCode = 'ID'
 
-/** Where a row came from. `sample` rows are demo data and are purgeable. */
-export type DataSource = 'csv' | 'teegle' | 'manual' | 'sample' | 'golf_genius'
+/** Where a row came from. `sample` rows are demo data and say so in the UI. */
+export type DataSource = 'manual' | 'sample'
 
 export interface CourseContact {
   contactName: string | null

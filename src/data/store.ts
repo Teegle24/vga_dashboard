@@ -1,58 +1,63 @@
 import type {
   ContactInput,
+  Course,
   DashboardData,
   EventRecord,
   FeedbackInput,
   NewEventInput,
   WaitlistEntry,
   WaitlistStatus,
-} from '@shared/types'
+} from '@/types'
 import {
   buildDashboardData,
-  mockCourses,
-  mockEvents,
-  mockWaitlist,
-} from '@/api/mock/data'
+  seedCourses,
+  seedEvents,
+  seedWaitlist,
+} from '@/data/seed'
 import { todayInIdaho } from '@/lib/dates'
+import { currentStateCode } from '@/lib/state'
 
 /**
- * In-memory API used when VITE_USE_MOCK is on. State is mirrored to
- * localStorage so a demo survives a page refresh, and `resetMockState` gives a
- * clean slate before a walkthrough.
+ * The whole directory lives in the browser. Edits are mirrored to localStorage
+ * so a walkthrough survives a refresh, and `resetDemoData` gives a clean slate
+ * before showing someone new.
  */
 
-const STORAGE_KEY = 'vga-dashboard.mock.v1'
+const STORAGE_KEY = 'vga-dashboard.v1'
 
-interface MockState {
-  courses: typeof mockCourses
+/** Whoever is driving the demo. Becomes a real signed-in user later. */
+export const CURRENT_DIRECTOR = 'Mark Brinkman'
+
+interface StoreState {
+  courses: Course[]
   events: EventRecord[]
   waitlist: WaitlistEntry[]
   feedback: { message: string; at: string }[]
 }
 
-function seedState(): MockState {
+function freshState(): StoreState {
   return {
-    courses: structuredClone(mockCourses),
-    events: structuredClone(mockEvents),
-    waitlist: structuredClone(mockWaitlist),
+    courses: structuredClone(seedCourses),
+    events: structuredClone(seedEvents),
+    waitlist: structuredClone(seedWaitlist),
     feedback: [],
   }
 }
 
-let state: MockState | null = null
+let state: StoreState | null = null
 
-function load(): MockState {
+function load(): StoreState {
   if (state) return state
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) {
-      state = JSON.parse(raw) as MockState
+      state = JSON.parse(raw) as StoreState
       return state
     }
   } catch {
     // Corrupt or unavailable storage just means we start from seed.
   }
-  state = seedState()
+  state = freshState()
   return state
 }
 
@@ -65,23 +70,24 @@ function save() {
   }
 }
 
-export function resetMockState() {
-  state = seedState()
+export function resetDemoData() {
+  state = freshState()
   save()
-}
-
-function dashboard(): DashboardData {
-  const s = load()
-  return buildDashboardData(s.courses, s.events, s.waitlist)
 }
 
 function nowIso() {
   return new Date().toISOString()
 }
 
-const DEMO_ACTOR = 'Mark Brinkman'
+export function getDashboard(): DashboardData {
+  const s = load()
+  return buildDashboardData(s.courses, s.events, s.waitlist)
+}
 
-function updateContact(courseId: string, input: ContactInput) {
+export function saveContact(
+  courseId: string,
+  input: ContactInput,
+): DashboardData {
   const s = load()
   const course = s.courses.find((c) => c.id === courseId)
   if (!course) throw new Error('Course not found')
@@ -95,15 +101,15 @@ function updateContact(courseId: string, input: ContactInput) {
       ? todayInIdaho()
       : course.contact.lastConfirmedDate,
     updatedAt: nowIso(),
-    updatedBy: DEMO_ACTOR,
+    updatedBy: CURRENT_DIRECTOR,
   }
   // A contact the director just typed is no longer sample data.
   if (course.source === 'sample') course.source = 'manual'
   save()
-  return dashboard()
+  return getDashboard()
 }
 
-function addEvent(input: NewEventInput) {
+export function logEvent(input: NewEventInput): DashboardData {
   const s = load()
   const course = s.courses.find((c) => c.id === input.courseId)
   if (!course) throw new Error('Course not found')
@@ -112,7 +118,7 @@ function addEvent(input: NewEventInput) {
     id: `evt-${Date.now()}`,
     courseId: input.courseId,
     courseName: course.name,
-    stateCode: 'ID',
+    stateCode: currentStateCode(),
     name: input.name,
     eventDate: input.eventDate,
     headcount: input.headcount,
@@ -122,44 +128,54 @@ function addEvent(input: NewEventInput) {
     teeSheetSentAt: null,
     source: 'manual',
     waitlistCount: 0,
-    updatedBy: DEMO_ACTOR,
+    updatedBy: CURRENT_DIRECTOR,
     updatedAt: nowIso(),
   })
   save()
-  return dashboard()
+  return getDashboard()
 }
 
-function patchEvent(id: string, patch: Partial<EventRecord>) {
+export function patchEvent(
+  id: string,
+  patch: Partial<EventRecord>,
+): DashboardData {
   const s = load()
   const event = s.events.find((e) => e.id === id)
   if (!event) throw new Error('Event not found')
-  Object.assign(event, patch, { updatedAt: nowIso(), updatedBy: DEMO_ACTOR })
+  Object.assign(event, patch, {
+    updatedAt: nowIso(),
+    updatedBy: CURRENT_DIRECTOR,
+  })
   save()
-  return dashboard()
+  return getDashboard()
 }
 
-function deleteEvent(id: string) {
+export function deleteEvent(id: string): DashboardData {
   const s = load()
   s.events = s.events.filter((e) => e.id !== id)
   s.waitlist = s.waitlist.filter((w) => w.eventId !== id)
   save()
-  return dashboard()
+  return getDashboard()
 }
 
-function restoreEvent(event: EventRecord) {
+export function restoreEvent(event: EventRecord): DashboardData {
   const s = load()
   if (!s.events.some((e) => e.id === event.id)) s.events.push(event)
   save()
-  return dashboard()
+  return getDashboard()
 }
 
-function listWaitlist(eventId: string) {
+export function listWaitlist(eventId: string): WaitlistEntry[] {
   return load()
     .waitlist.filter((w) => w.eventId === eventId)
     .sort((a, b) => a.rank - b.rank)
 }
 
-function addWaitlist(eventId: string, memberName: string, phone: string | null) {
+export function addWaitlistEntry(
+  eventId: string,
+  memberName: string,
+  phone: string | null,
+): WaitlistEntry[] {
   const s = load()
   const existing = listWaitlist(eventId)
   s.waitlist.push({
@@ -175,10 +191,10 @@ function addWaitlist(eventId: string, memberName: string, phone: string | null) 
   return listWaitlist(eventId)
 }
 
-function patchWaitlist(
+export function patchWaitlistEntry(
   id: string,
   patch: { status?: WaitlistStatus; direction?: 'up' | 'down' },
-) {
+): WaitlistEntry[] {
   const s = load()
   const entry = s.waitlist.find((w) => w.id === id)
   if (!entry) throw new Error('Waitlist entry not found')
@@ -201,7 +217,7 @@ function patchWaitlist(
   return listWaitlist(entry.eventId)
 }
 
-function removeWaitlist(id: string) {
+export function removeWaitlistEntry(id: string): WaitlistEntry[] {
   const s = load()
   const entry = s.waitlist.find((w) => w.id === id)
   const eventId = entry?.eventId
@@ -216,63 +232,13 @@ function removeWaitlist(id: string) {
   return eventId ? listWaitlist(eventId) : []
 }
 
-function addFeedback(input: FeedbackInput) {
+export function sendFeedback(input: FeedbackInput) {
   const s = load()
   s.feedback.push({ message: input.message, at: nowIso() })
   save()
-  return { ok: true }
 }
 
-/** Mirrors the shape of a fetch against the real API. */
-export async function mockRequest<T>(
-  method: string,
-  path: string,
-  body?: unknown,
-): Promise<T> {
-  // A touch of latency so loading states are real in the demo.
-  await new Promise((resolve) => setTimeout(resolve, 120))
-
-  const waitlistMatch = path.match(/^\/events\/([^/]+)\/waitlist$/)
-  const eventMatch = path.match(/^\/events\/([^/]+)$/)
-  const restoreMatch = path.match(/^\/events\/([^/]+)\/restore$/)
-  const contactMatch = path.match(/^\/courses\/([^/]+)\/contact$/)
-  const waitlistItemMatch = path.match(/^\/waitlist\/([^/]+)$/)
-
-  if (method === 'GET' && path === '/dashboard') return dashboard() as T
-  if (method === 'GET' && waitlistMatch) {
-    return listWaitlist(waitlistMatch[1]!) as T
-  }
-  if (method === 'PUT' && contactMatch) {
-    return updateContact(contactMatch[1]!, body as ContactInput) as T
-  }
-  if (method === 'POST' && path === '/events') {
-    return addEvent(body as NewEventInput) as T
-  }
-  if (method === 'PATCH' && eventMatch) {
-    return patchEvent(eventMatch[1]!, body as Partial<EventRecord>) as T
-  }
-  if (method === 'DELETE' && eventMatch) {
-    return deleteEvent(eventMatch[1]!) as T
-  }
-  if (method === 'POST' && restoreMatch) {
-    return restoreEvent(body as EventRecord) as T
-  }
-  if (method === 'POST' && waitlistMatch) {
-    const input = body as { memberName: string; phone: string | null }
-    return addWaitlist(waitlistMatch[1]!, input.memberName, input.phone) as T
-  }
-  if (method === 'PATCH' && waitlistItemMatch) {
-    return patchWaitlist(
-      waitlistItemMatch[1]!,
-      body as { status?: WaitlistStatus; direction?: 'up' | 'down' },
-    ) as T
-  }
-  if (method === 'DELETE' && waitlistItemMatch) {
-    return removeWaitlist(waitlistItemMatch[1]!) as T
-  }
-  if (method === 'POST' && path === '/feedback') {
-    return addFeedback(body as FeedbackInput) as T
-  }
-
-  throw new Error(`No mock handler for ${method} ${path}`)
+/** Everything Mark has typed in, for reading back after a walkthrough. */
+export function collectedFeedback() {
+  return load().feedback
 }
