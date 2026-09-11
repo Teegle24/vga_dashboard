@@ -4,6 +4,7 @@ import type { EventRecord } from '@/types'
 import { Card } from '@/components/ui/card'
 import { isAlertDue, isHeadcountDue, describeWhen, formatDate } from '@/lib/dates'
 import { formatMoney } from '@/lib/format'
+import { SeasonPlanner } from '@/components/season-planner'
 import { tournamentTrends, upcomingTournaments } from '@/lib/trends'
 
 export function PlanBoard({
@@ -36,9 +37,8 @@ export function PlanBoard({
           Hold the date. Build the sheet. Alert the field.
         </h2>
         <p className="mt-3 max-w-2xl text-lg text-ink-soft">
-          This desk is for securing a future block of tee times, then getting
-          the tournament to the first tee. Rates and contacts live with the
-          course so the next booking starts from something current.
+          Start from last year’s season, hold the same weeks, then get each
+          round to the first tee. Rates and contacts live with the course.
         </p>
       </div>
 
@@ -68,6 +68,8 @@ export function PlanBoard({
           }
         />
       </div>
+
+      <SeasonPlanner events={events} onOpenTournament={onOpenTournament} />
 
       <div className="grid gap-4">
         <h3 className="text-2xl font-semibold text-ink">Needs you this week</h3>

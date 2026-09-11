@@ -6,6 +6,7 @@ import {
   Users,
 } from 'lucide-react'
 import { CURRENT_DIRECTOR } from '@/data/store'
+import { currentStateName } from '@/lib/state'
 import { cn } from '@/lib/utils'
 
 export type DashboardTab =
@@ -40,7 +41,7 @@ export function Sidebar({
   return (
     <aside className="bg-forest/92 text-white lg:flex lg:h-dvh lg:w-72 lg:shrink-0 lg:flex-col lg:sticky lg:top-0">
       <div className="border-b border-white/10 px-5 py-4">
-        <div className="flex items-center gap-3 rounded-md bg-white px-2.5 py-1.5">
+        <div className="flex items-center gap-2.5 rounded-md bg-white px-2.5 py-1.5">
           <img
             src="/teegle-golf-logo.png"
             alt="Teegle Golf"
@@ -52,6 +53,10 @@ export function Sidebar({
             alt="Veteran Golfers Association"
             className="size-9 shrink-0 object-contain"
           />
+          <div className="h-7 w-px shrink-0 bg-border" aria-hidden />
+          <p className="min-w-0 truncate text-base font-semibold text-ink">
+            {currentStateName()}
+          </p>
         </div>
         <p className="mt-4 font-display text-xl font-semibold tracking-tight">
           VGA Idaho

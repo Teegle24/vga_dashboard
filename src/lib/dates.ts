@@ -48,6 +48,40 @@ export function isPast(isoDate: string, now: Date = new Date()): boolean {
   return daysUntil(isoDate, now) < 0
 }
 
+/** Same month and day as last year, rolled forward until it is still ahead. */
+export function nextSeasonDate(
+  lastPlayed: string,
+  today: string = todayInIdaho(),
+): string {
+  const [, month, rawDay] = lastPlayed.split('-')
+  const day = Number(rawDay)
+  if (!month || !day) return today
+
+  let year = Number(today.slice(0, 4))
+  let candidate = clampMonthDay(year, month, day)
+  if (candidate <= today) {
+    candidate = clampMonthDay(year + 1, month, day)
+  }
+  return candidate
+}
+
+function clampMonthDay(year: number, month: string, day: number): string {
+  const last = new Date(Date.UTC(year, Number(month), 0, 12)).getUTCDate()
+  return `${year}-${month}-${String(Math.min(day, last)).padStart(2, '0')}`
+}
+
+/** "May 2" */
+export function formatMonthDay(isoDate: string | null): string {
+  if (!isoDate) return '—'
+  const [y, m, d] = isoDate.split('-').map(Number)
+  if (!y || !m || !d) return '—'
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(Date.UTC(y, m - 1, d, 12)))
+}
+
 /** "Mar 14, 2026" */
 export function formatDate(isoDate: string | null): string {
   if (!isoDate) return '—'
