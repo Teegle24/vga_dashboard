@@ -58,6 +58,12 @@ function exportEverything(data: DashboardData) {
     ]),
   ]
   downloadCsv('vga-idaho-tournaments.csv', eventRows)
+
+  const memberRows = [
+    ['Name', 'Phone', 'City'],
+    ...data.members.map((m) => [m.name, m.phone ?? '', m.city ?? '']),
+  ]
+  downloadCsv('vga-idaho-members.csv', memberRows)
 }
 
 /**

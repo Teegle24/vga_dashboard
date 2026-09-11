@@ -5,6 +5,7 @@ import type {
   EventRecord,
   FeedbackInput,
   NewEventInput,
+  NewMemberInput,
   WaitlistEntry,
   WaitlistStatus,
 } from '@/types'
@@ -12,6 +13,8 @@ import * as store from '@/data/store'
 
 const DASHBOARD_KEY = ['dashboard']
 const WAITLIST_KEY = ['waitlist']
+const PLAYERS_KEY = ['players']
+const MEMBERS_KEY = ['members']
 
 export function useDashboard() {
   return useQuery({
@@ -51,6 +54,49 @@ export function useDeleteEvent() {
 
 export function useRestoreEvent() {
   return useDashboardMutation<EventRecord>((event) => store.restoreEvent(event))
+}
+
+export function usePlayers(eventId: string | null) {
+  return useQuery({
+    queryKey: [...PLAYERS_KEY, eventId],
+    enabled: Boolean(eventId),
+    queryFn: () => store.listPlayers(eventId!),
+  })
+}
+
+function useRosterMutation<TInput>(fn: (input: TInput) => unknown) {
+  const client = useQueryClient()
+  return useMutation({
+    mutationFn: async (input: TInput) => fn(input),
+    onSuccess: () => {
+      client.invalidateQueries({ queryKey: PLAYERS_KEY })
+      client.invalidateQueries({ queryKey: WAITLIST_KEY })
+      client.invalidateQueries({ queryKey: MEMBERS_KEY })
+      client.invalidateQueries({ queryKey: DASHBOARD_KEY })
+    },
+  })
+}
+
+export function useAddPlayer() {
+  return useRosterMutation<{
+    eventId: string
+    memberName: string
+    phone: string | null
+  }>(({ eventId, memberName, phone }) =>
+    store.addPlayer(eventId, memberName, phone),
+  )
+}
+
+export function useRemovePlayer() {
+  return useRosterMutation<string>((id) => store.removePlayer(id))
+}
+
+export function useMovePlayerToStandby() {
+  return useRosterMutation<string>((id) => store.movePlayerToStandby(id))
+}
+
+export function usePromoteToField() {
+  return useRosterMutation<string>((id) => store.promoteToField(id))
 }
 
 export function useWaitlist(eventId: string | null) {
@@ -93,6 +139,31 @@ export function usePatchWaitlistEntry() {
 
 export function useRemoveWaitlistEntry() {
   return useWaitlistMutation<string>((id) => store.removeWaitlistEntry(id))
+}
+
+export function useMembers() {
+  return useQuery({
+    queryKey: MEMBERS_KEY,
+    queryFn: async () => store.listMembers(),
+  })
+}
+
+export function useAllPlayers() {
+  return useQuery({
+    queryKey: [...PLAYERS_KEY, 'all'],
+    queryFn: async () => store.listAllPlayers(),
+  })
+}
+
+export function useAllWaitlist() {
+  return useQuery({
+    queryKey: [...WAITLIST_KEY, 'all'],
+    queryFn: async () => store.listAllWaitlist(),
+  })
+}
+
+export function useAddMember() {
+  return useDashboardMutation<NewMemberInput>((input) => store.addMember(input))
 }
 
 export function useSendFeedback() {

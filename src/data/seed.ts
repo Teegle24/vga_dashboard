@@ -1,7 +1,16 @@
-import type { Course, DashboardData, EventRecord, WaitlistEntry } from '@/types'
+import type {
+  Course,
+  DashboardData,
+  EventRecord,
+  Member,
+  Player,
+  WaitlistEntry,
+} from '@/types'
 import {
   COURSE_SEEDS,
   EVENT_SEEDS,
+  EXTRA_MEMBER_SEEDS,
+  PLAYER_SEEDS,
   WAITLIST_SEEDS,
   slugify,
 } from '@/data/idaho-seed'
@@ -87,9 +96,20 @@ export const seedEvents: EventRecord[] = EVENT_SEEDS.map((seed, index) => {
     alertSentAt: null,
     teeGroups: null,
     source: 'sample',
+    playerCount: 0,
     waitlistCount: 0,
     updatedBy: 'Mark Brinkman',
     updatedAt: ago(Math.max(1, Math.abs(seed.offsetDays) - 2)),
+  }
+})
+
+export const seedPlayers: Player[] = PLAYER_SEEDS.map((seed, index) => {
+  const event = seedEvents.find((e) => e.name === seed.eventName)
+  return {
+    id: `pl-${index + 1}`,
+    eventId: event?.id ?? '',
+    memberName: seed.memberName,
+    phone: seed.phone,
   }
 })
 
@@ -111,6 +131,31 @@ export const seedWaitlist: WaitlistEntry[] = WAITLIST_SEEDS.map(
     }
   },
 )
+
+export const seedMembers: Member[] = (() => {
+  const seen = new Set<string>()
+  const members: Member[] = []
+
+  function add(name: string, phone: string | null, city: string | null) {
+    const key = name.toLowerCase()
+    if (seen.has(key)) return
+    seen.add(key)
+    members.push({
+      id: `mem-${members.length + 1}`,
+      name,
+      phone,
+      city,
+    })
+  }
+
+  for (const row of [...PLAYER_SEEDS, ...WAITLIST_SEEDS]) {
+    add(row.memberName, row.phone, null)
+  }
+  for (const row of EXTRA_MEMBER_SEEDS) {
+    add(row.name, row.phone, row.city)
+  }
+  return members
+})()
 
 /**
  * Rolls the newest rate paid onto each course. Rate history is always derived
@@ -138,9 +183,12 @@ export function buildDashboardData(
   courses: Course[],
   events: EventRecord[],
   waitlist: WaitlistEntry[],
+  players: Player[] = [],
+  members: Member[] = [],
 ): DashboardData {
   const withCounts = events.map((event) => ({
     ...event,
+    playerCount: players.filter((p) => p.eventId === event.id).length,
     waitlistCount: waitlist.filter(
       (w) => w.eventId === event.id && w.status === 'waiting',
     ).length,
@@ -149,6 +197,7 @@ export function buildDashboardData(
   return {
     courses: applyDerivedRates(courses, withCounts),
     events: withCounts,
+    members,
     hasSampleData:
       courses.some((c) => c.source === 'sample') ||
       events.some((e) => e.source === 'sample'),

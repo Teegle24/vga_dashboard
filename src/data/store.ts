@@ -4,7 +4,10 @@ import type {
   DashboardData,
   EventRecord,
   FeedbackInput,
+  Member,
   NewEventInput,
+  NewMemberInput,
+  Player,
   WaitlistEntry,
   WaitlistStatus,
 } from '@/types'
@@ -12,6 +15,8 @@ import {
   buildDashboardData,
   seedCourses,
   seedEvents,
+  seedMembers,
+  seedPlayers,
   seedWaitlist,
 } from '@/data/seed'
 import { todayInIdaho } from '@/lib/dates'
@@ -23,7 +28,7 @@ import { currentStateCode } from '@/lib/state'
  * before showing someone new.
  */
 
-const STORAGE_KEY = 'vga-dashboard.v2'
+const STORAGE_KEY = 'vga-dashboard.v4'
 
 /** Whoever is driving the demo. Becomes a real signed-in user later. */
 export const CURRENT_DIRECTOR = 'Mark Brinkman'
@@ -31,6 +36,8 @@ export const CURRENT_DIRECTOR = 'Mark Brinkman'
 interface StoreState {
   courses: Course[]
   events: EventRecord[]
+  players: Player[]
+  members: Member[]
   waitlist: WaitlistEntry[]
   feedback: { message: string; at: string }[]
 }
@@ -39,6 +46,8 @@ function freshState(): StoreState {
   return {
     courses: structuredClone(seedCourses),
     events: structuredClone(seedEvents),
+    players: structuredClone(seedPlayers),
+    members: structuredClone(seedMembers),
     waitlist: structuredClone(seedWaitlist),
     feedback: [],
   }
@@ -46,13 +55,24 @@ function freshState(): StoreState {
 
 let state: StoreState | null = null
 
+function hasRoster(value: StoreState): boolean {
+  return (
+    Array.isArray(value.players) &&
+    Array.isArray(value.waitlist) &&
+    Array.isArray(value.members)
+  )
+}
+
 function load(): StoreState {
-  if (state) return state
+  if (state && hasRoster(state)) return state
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) {
-      state = JSON.parse(raw) as StoreState
-      return state
+      const parsed = JSON.parse(raw) as StoreState
+      if (hasRoster(parsed)) {
+        state = parsed
+        return state
+      }
     }
   } catch {
     // Corrupt or unavailable storage just means we start from seed.
@@ -81,7 +101,13 @@ function nowIso() {
 
 export function getDashboard(): DashboardData {
   const s = load()
-  return buildDashboardData(s.courses, s.events, s.waitlist)
+  return buildDashboardData(
+    s.courses,
+    s.events,
+    s.waitlist,
+    s.players,
+    s.members,
+  )
 }
 
 export function saveContact(
@@ -134,6 +160,7 @@ export function logEvent(input: NewEventInput): DashboardData {
     alertSentAt: null,
     teeGroups: null,
     source: 'manual',
+    playerCount: 0,
     waitlistCount: 0,
     updatedBy: CURRENT_DIRECTOR,
     updatedAt: nowIso(),
@@ -161,6 +188,7 @@ export function deleteEvent(id: string): DashboardData {
   const s = load()
   s.events = s.events.filter((e) => e.id !== id)
   s.waitlist = s.waitlist.filter((w) => w.eventId !== id)
+  s.players = s.players.filter((p) => p.eventId !== id)
   save()
   return getDashboard()
 }
@@ -170,6 +198,77 @@ export function restoreEvent(event: EventRecord): DashboardData {
   if (!s.events.some((e) => e.id === event.id)) s.events.push(event)
   save()
   return getDashboard()
+}
+
+export function listAllPlayers(): Player[] {
+  return load().players.slice()
+}
+
+export function listAllWaitlist(): WaitlistEntry[] {
+  return load().waitlist.slice()
+}
+
+export function listPlayers(eventId: string): Player[] {
+  return load().players.filter((p) => p.eventId === eventId)
+}
+
+export function addPlayer(
+  eventId: string,
+  memberName: string,
+  phone: string | null,
+): Player[] {
+  const s = load()
+  s.players.push({
+    id: `pl-${Date.now()}`,
+    eventId,
+    memberName,
+    phone,
+  })
+  ensureMember(memberName, phone)
+  save()
+  return listPlayers(eventId)
+}
+
+export function removePlayer(id: string): Player[] {
+  const s = load()
+  const player = s.players.find((p) => p.id === id)
+  s.players = s.players.filter((p) => p.id !== id)
+  save()
+  return player ? listPlayers(player.eventId) : []
+}
+
+/** Last-minute no-show: take them off the field and put them last on standby. */
+export function movePlayerToStandby(id: string): {
+  players: Player[]
+  waitlist: WaitlistEntry[]
+} {
+  const s = load()
+  const player = s.players.find((p) => p.id === id)
+  if (!player) throw new Error('Player not found')
+  s.players = s.players.filter((p) => p.id !== id)
+  save()
+  addWaitlistEntry(player.eventId, player.memberName, player.phone)
+  return {
+    players: listPlayers(player.eventId),
+    waitlist: listWaitlist(player.eventId),
+  }
+}
+
+/** First on standby gets the open spot. */
+export function promoteToField(waitlistId: string): {
+  players: Player[]
+  waitlist: WaitlistEntry[]
+} {
+  const s = load()
+  const entry = s.waitlist.find((w) => w.id === waitlistId)
+  if (!entry) throw new Error('Waitlist entry not found')
+  addPlayer(entry.eventId, entry.memberName, entry.phone)
+  entry.status = 'filled'
+  save()
+  return {
+    players: listPlayers(entry.eventId),
+    waitlist: listWaitlist(entry.eventId),
+  }
 }
 
 export function listWaitlist(eventId: string): WaitlistEntry[] {
@@ -194,6 +293,7 @@ export function addWaitlistEntry(
     email: null,
     status: 'waiting',
   })
+  ensureMember(memberName, phone)
   save()
   return listWaitlist(eventId)
 }
@@ -237,6 +337,47 @@ export function removeWaitlistEntry(id: string): WaitlistEntry[] {
   }
   save()
   return eventId ? listWaitlist(eventId) : []
+}
+
+export function listMembers(): Member[] {
+  return load()
+    .members.slice()
+    .sort((a, b) => a.name.localeCompare(b.name))
+}
+
+function ensureMember(name: string, phone: string | null) {
+  const s = load()
+  const key = name.trim().toLowerCase()
+  if (s.members.some((m) => m.name.toLowerCase() === key)) return
+  s.members.push({
+    id: `mem-${Date.now()}`,
+    name: name.trim(),
+    phone,
+    city: null,
+  })
+}
+
+export function addMember(input: NewMemberInput): DashboardData {
+  const s = load()
+  const name = input.name.trim()
+  if (name) {
+    const existing = s.members.find(
+      (m) => m.name.toLowerCase() === name.toLowerCase(),
+    )
+    if (existing) {
+      existing.phone = input.phone ?? existing.phone
+      existing.city = input.city ?? existing.city
+    } else {
+      s.members.push({
+        id: `mem-${Date.now()}`,
+        name,
+        phone: input.phone,
+        city: input.city,
+      })
+    }
+    save()
+  }
+  return getDashboard()
 }
 
 export function sendFeedback(input: FeedbackInput) {

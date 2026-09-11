@@ -5,6 +5,7 @@ import { TextField } from '@/components/ui/field'
 import {
   useAddWaitlistEntry,
   usePatchWaitlistEntry,
+  usePromoteToField,
   useRemoveWaitlistEntry,
   useWaitlist,
 } from '@/data/hooks'
@@ -19,6 +20,7 @@ export function WaitlistPanel({ eventId }: { eventId: string }) {
   const { data: entries = [], isLoading } = useWaitlist(eventId)
   const add = useAddWaitlistEntry()
   const patch = usePatchWaitlistEntry()
+  const promote = usePromoteToField()
   const remove = useRemoveWaitlistEntry()
 
   const [name, setName] = useState('')
@@ -114,8 +116,8 @@ export function WaitlistPanel({ eventId }: { eventId: string }) {
                 </button>
                 <button
                   type="button"
-                  aria-label={`${entry.memberName} got the spot`}
-                  onClick={() => patch.mutate({ id: entry.id, status: 'filled' })}
+                  aria-label={`Give ${entry.memberName} a spot on the field`}
+                  onClick={() => promote.mutate(entry.id)}
                   className="flex size-12 items-center justify-center rounded-md text-brand hover:bg-brand-soft"
                 >
                   <Check className="size-5" aria-hidden />
@@ -156,7 +158,7 @@ export function WaitlistPanel({ eventId }: { eventId: string }) {
           disabled={!name.trim() || add.isPending}
         >
           <Plus className="size-5" aria-hidden />
-          Add
+          Add to standby
         </Button>
       </div>
     </div>

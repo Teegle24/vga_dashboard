@@ -3,6 +3,7 @@ import { Bell, Check, ChevronDown, FileSpreadsheet, Users } from 'lucide-react'
 import type { EventRecord } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Card, Pill } from '@/components/ui/card'
+import { FieldPanel } from '@/components/field-panel'
 import { TeeSheetBuilder } from '@/components/tee-sheet-builder'
 import { WaitlistPanel } from '@/components/waitlist-panel'
 import { usePatchEvent } from '@/data/hooks'
@@ -13,7 +14,7 @@ import {
   isHeadcountDue,
   isPast,
 } from '@/lib/dates'
-import { formatHeadcount, formatMoney, statusLabel } from '@/lib/format'
+import { formatMoney, statusLabel } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
 function TournamentStatus({ event }: { event: EventRecord }) {
@@ -40,7 +41,7 @@ function TournamentCard({
   startOpen?: boolean
 }) {
   const [sheetOpen, setSheetOpen] = useState(Boolean(startOpen))
-  const [standbyOpen, setStandbyOpen] = useState(false)
+  const [rosterOpen, setRosterOpen] = useState(true)
   const patch = usePatchEvent()
   const past = isPast(event.eventDate)
   const highlight =
@@ -63,8 +64,9 @@ function TournamentCard({
 
         <div className="flex flex-wrap gap-x-8 gap-y-2 text-base">
           <span>
-            <span className="text-ink-soft">Players: </span>
-            {formatHeadcount(event.headcount)}
+            <span className="text-ink-soft">On the field: </span>
+            {event.playerCount}
+            {event.headcount != null ? ` of ${event.headcount}` : ''}
           </span>
           {event.groupsHeld ? (
             <span>
@@ -84,12 +86,10 @@ function TournamentCard({
             </span>
             {formatMoney(event.ratePaid ?? event.rateQuoted)}
           </span>
-          {event.waitlistCount > 0 ? (
-            <span className="inline-flex items-center gap-1.5">
-              <Users className="size-4 text-ink-soft" aria-hidden />
-              {event.waitlistCount} on standby
-            </span>
-          ) : null}
+          <span className="inline-flex items-center gap-1.5">
+            <Users className="size-4 text-ink-soft" aria-hidden />
+            {event.waitlistCount} on standby
+          </span>
         </div>
 
         {!past ? (
@@ -136,15 +136,15 @@ function TournamentCard({
                 : 'Text players 3–5 days out'}
             </Button>
 
-            <Button variant="quiet" onClick={() => setStandbyOpen((v) => !v)}>
+            <Button variant="quiet" onClick={() => setRosterOpen((v) => !v)}>
               <ChevronDown
                 className={cn(
                   'size-5 transition-transform',
-                  standbyOpen && 'rotate-180',
+                  rosterOpen && 'rotate-180',
                 )}
                 aria-hidden
               />
-              {standbyOpen ? 'Hide standby' : 'Standby list'}
+              {rosterOpen ? 'Hide players' : 'Field & standby'}
             </Button>
           </div>
         ) : null}
@@ -164,8 +164,9 @@ function TournamentCard({
         </div>
       ) : null}
 
-      {standbyOpen ? (
-        <div className="border-t border-border p-5">
+      {rosterOpen ? (
+        <div className="grid gap-4 border-t border-border p-5 lg:grid-cols-2">
+          <FieldPanel eventId={event.id} spotsHeld={event.headcount} />
           <WaitlistPanel eventId={event.id} />
         </div>
       ) : null}

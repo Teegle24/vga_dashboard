@@ -382,12 +382,55 @@ export const EVENT_SEEDS: EventSeed[] = [
   },
 ]
 
+export const PLAYER_SEEDS = [
+  { eventName: 'Veterans Day Tournament', memberName: 'Jim Holloway', phone: '208-555-0104' },
+  { eventName: 'Veterans Day Tournament', memberName: 'Pete Alvarez', phone: '208-555-0111' },
+  { eventName: 'Veterans Day Tournament', memberName: 'Walt Jensen', phone: '208-555-0122' },
+  { eventName: 'Veterans Day Tournament', memberName: 'Harold Quinn', phone: '208-555-0128' },
+  { eventName: 'Veterans Day Tournament', memberName: 'Earl Whitcomb', phone: '208-555-0133' },
+  { eventName: 'Veterans Day Tournament', memberName: 'Sam Ortiz', phone: '208-555-0139' },
+  { eventName: 'Veterans Day Tournament', memberName: 'Don Keeler', phone: '208-555-0146' },
+  { eventName: 'Veterans Day Tournament', memberName: 'Frank Mullins', phone: '208-555-0150' },
+  { eventName: 'Veterans Day Tournament', memberName: 'Ray Stoddard', phone: '208-555-0158' },
+  { eventName: 'Veterans Day Tournament', memberName: 'Gene Harlan', phone: '208-555-0164' },
+  { eventName: 'Veterans Day Tournament', memberName: 'Chuck Blevins', phone: '208-555-0169' },
+  { eventName: 'Veterans Day Tournament', memberName: 'Al Moretti', phone: '208-555-0174' },
+  { eventName: 'Fall Medal', memberName: 'Tom Braddock', phone: '208-555-0108' },
+  { eventName: 'Fall Medal', memberName: 'Bill Kearns', phone: '208-555-0115' },
+  { eventName: 'Fall Medal', memberName: 'Mike Santoro', phone: '208-555-0120' },
+  { eventName: 'Fall Medal', memberName: 'Joe Pennington', phone: '208-555-0126' },
+  { eventName: 'Fall Medal', memberName: 'Steve Okuda', phone: '208-555-0134' },
+  { eventName: 'Fall Medal', memberName: 'Carl Briggs', phone: '208-555-0140' },
+  { eventName: 'Fall Medal', memberName: 'Ned Paulson', phone: '208-555-0148' },
+  { eventName: 'Fall Medal', memberName: 'Henry Voss', phone: '208-555-0152' },
+  { eventName: 'Idaho State Championship', memberName: 'Mark Brinkman', phone: '208-555-0101' },
+  { eventName: 'Idaho State Championship', memberName: 'Dave Whitaker', phone: '208-555-0118' },
+  { eventName: 'Idaho State Championship', memberName: 'Pat Kearney', phone: '208-555-0124' },
+  { eventName: 'Idaho State Championship', memberName: 'Curtis Behn', phone: '208-555-0131' },
+]
+
 export const WAITLIST_SEEDS = [
+  { eventName: 'Veterans Day Tournament', memberName: 'Lou Packer', phone: '208-555-0180' },
+  { eventName: 'Veterans Day Tournament', memberName: 'Ken Drury', phone: '208-555-0182' },
   { eventName: 'Fall Medal', memberName: 'Ron Castellano', phone: '208-555-0161' },
   { eventName: 'Fall Medal', memberName: 'Gary Nuñez', phone: '208-555-0173' },
+  { eventName: 'Fall Medal', memberName: 'Phil Graves', phone: '208-555-0178' },
   {
     eventName: 'Idaho State Championship',
     memberName: 'Dennis Fryar',
     phone: '208-555-0184',
   },
+  {
+    eventName: 'Idaho State Championship',
+    memberName: 'Art Lindholm',
+    phone: '208-555-0188',
+  },
+]
+
+/** Members not yet on a tournament, plus extras the director keeps on file. */
+export const EXTRA_MEMBER_SEEDS = [
+  { name: 'Roy Timmons', phone: '208-555-0191', city: 'Meridian' },
+  { name: 'Paul Hendricks', phone: '208-555-0193', city: 'Boise' },
+  { name: 'Vic Romero', phone: '208-555-0195', city: 'Nampa' },
+  { name: 'Stan Collett', phone: '208-555-0197', city: 'Idaho Falls' },
 ]
