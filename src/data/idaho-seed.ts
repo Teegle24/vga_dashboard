@@ -33,9 +33,11 @@ export interface EventSeed {
   offsetDays: number
   headcount: number | null
   ratePaid: number | null
-  isTournament: boolean
+  firstTeeTime?: string
+  groupsHeld?: number
   headcountSent?: boolean
   teeSheetSent?: boolean
+  alertsOn?: boolean
 }
 
 export function slugify(name: string): string {
@@ -263,14 +265,15 @@ export const COURSE_SEEDS: CourseSeed[] = [
 ]
 
 export const EVENT_SEEDS: EventSeed[] = [
-  // Past events. These are what make rate history visible on day one.
+  // Past stroke-play tournaments. These are what make rate history visible.
   {
     courseSlug: 'warm-springs-golf-course',
-    name: 'Spring Kickoff Scramble',
+    name: 'Spring Kickoff',
     offsetDays: -186,
     headcount: 48,
     ratePaid: 38,
-    isTournament: true,
+    firstTeeTime: '08:00',
+    groupsHeld: 12,
     headcountSent: true,
     teeSheetSent: true,
   },
@@ -280,17 +283,19 @@ export const EVENT_SEEDS: EventSeed[] = [
     offsetDays: -132,
     headcount: 72,
     ratePaid: 52,
-    isTournament: true,
+    firstTeeTime: '07:30',
+    groupsHeld: 18,
     headcountSent: true,
     teeSheetSent: true,
   },
   {
     courseSlug: 'ridgecrest-golf-club',
-    name: 'Summer Series #1',
+    name: 'June Medal',
     offsetDays: -96,
     headcount: 36,
     ratePaid: 44,
-    isTournament: false,
+    firstTeeTime: '08:00',
+    groupsHeld: 9,
     headcountSent: true,
     teeSheetSent: true,
   },
@@ -300,7 +305,8 @@ export const EVENT_SEEDS: EventSeed[] = [
     offsetDays: -68,
     headcount: 84,
     ratePaid: 47,
-    isTournament: true,
+    firstTeeTime: '07:20',
+    groupsHeld: 21,
     headcountSent: true,
     teeSheetSent: true,
   },
@@ -310,48 +316,53 @@ export const EVENT_SEEDS: EventSeed[] = [
     offsetDays: -44,
     headcount: 40,
     ratePaid: 50,
-    isTournament: true,
+    firstTeeTime: '08:00',
+    groupsHeld: 10,
     headcountSent: true,
     teeSheetSent: true,
   },
   {
     courseSlug: 'purple-sage-golf-course',
-    name: 'Summer Series #2',
+    name: 'August Medal',
     offsetDays: -30,
     headcount: 32,
     ratePaid: 35,
-    isTournament: false,
+    firstTeeTime: '08:10',
+    groupsHeld: 8,
     headcountSent: true,
     teeSheetSent: true,
   },
   {
     courseSlug: 'banbury-golf-course',
-    name: 'Labor Day Shootout',
+    name: 'Labor Day Tournament',
     offsetDays: -12,
     headcount: 64,
     ratePaid: 54,
-    isTournament: true,
+    firstTeeTime: '07:30',
+    groupsHeld: 16,
     headcountSent: true,
     teeSheetSent: true,
   },
 
-  // Upcoming. One lands inside the 6-8 day headcount window on purpose so the
-  // reminder is always visible in a demo.
+  // Upcoming. One in the week-out headcount window, one in the 3–5 day
+  // player-alert window, one still waiting on a hold.
   {
     courseSlug: 'eagle-hills-golf-course',
-    name: 'Fall Four-Ball',
+    name: 'Fall Medal',
     offsetDays: 7,
     headcount: 56,
     ratePaid: null,
-    isTournament: true,
+    firstTeeTime: '07:30',
+    groupsHeld: 14,
   },
   {
     courseSlug: 'warm-springs-golf-course',
-    name: 'Veterans Appreciation Round',
-    offsetDays: 16,
+    name: 'Veterans Day Tournament',
+    offsetDays: 4,
     headcount: 44,
     ratePaid: null,
-    isTournament: false,
+    firstTeeTime: '08:00',
+    groupsHeld: 11,
   },
   {
     courseSlug: 'the-coeur-d-alene-resort-golf-course',
@@ -359,21 +370,21 @@ export const EVENT_SEEDS: EventSeed[] = [
     offsetDays: 33,
     headcount: 96,
     ratePaid: null,
-    isTournament: true,
+    firstTeeTime: '07:00',
+    groupsHeld: 24,
   },
   {
     courseSlug: 'ridgecrest-golf-club',
-    name: 'Turkey Shoot',
+    name: 'Thanksgiving Tournament',
     offsetDays: 52,
     headcount: null,
     ratePaid: null,
-    isTournament: true,
   },
 ]
 
 export const WAITLIST_SEEDS = [
-  { eventName: 'Fall Four-Ball', memberName: 'Ron Castellano', phone: '208-555-0161' },
-  { eventName: 'Fall Four-Ball', memberName: 'Gary Nuñez', phone: '208-555-0173' },
+  { eventName: 'Fall Medal', memberName: 'Ron Castellano', phone: '208-555-0161' },
+  { eventName: 'Fall Medal', memberName: 'Gary Nuñez', phone: '208-555-0173' },
   {
     eventName: 'Idaho State Championship',
     memberName: 'Dennis Fryar',

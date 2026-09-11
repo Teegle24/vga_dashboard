@@ -11,7 +11,7 @@ export function Card({
   return (
     <div
       className={cn(
-        'rounded-lg border border-border bg-card p-6 shadow-none',
+        'rounded-lg border border-border bg-card p-6 shadow-[0_1px_0_rgba(18,33,12,0.04),0_18px_40px_-24px_rgba(18,33,12,0.35)]',
         className,
       )}
     >
@@ -32,9 +32,9 @@ export function SectionHeading({
   return (
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
       <div>
-        <h2 className="text-2xl font-semibold text-ink">{title}</h2>
+        <h2 className="text-3xl font-semibold text-ink">{title}</h2>
         {description ? (
-          <p className="mt-1 text-base text-ink-soft">{description}</p>
+          <p className="mt-1.5 max-w-xl text-base text-ink-soft">{description}</p>
         ) : null}
       </div>
       {action}
@@ -42,7 +42,6 @@ export function SectionHeading({
   )
 }
 
-/** Status pill. Deliberately text-forward with a small dot, not a wall of color. */
 export function Pill({
   tone = 'neutral',
   children,
@@ -52,20 +51,20 @@ export function Pill({
 }) {
   const tones = {
     neutral: 'bg-muted text-ink-soft',
-    due: 'bg-accent-soft text-ink',
+    due: 'bg-gold-soft text-ink',
     done: 'bg-brand-soft text-brand',
   } as const
 
   const dots = {
     neutral: 'bg-ink-soft/40',
-    due: 'bg-accent',
+    due: 'bg-gold',
     done: 'bg-brand',
   } as const
 
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium',
+        'inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-semibold',
         tones[tone],
       )}
     >

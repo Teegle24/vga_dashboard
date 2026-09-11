@@ -1,43 +1,42 @@
 import { CURRENT_DIRECTOR } from '@/data/store'
-import { currentStateName } from '@/lib/state'
 
 /**
- * The only chrome on the page. White background on purpose: the supplied Teegle
- * logo has a solid white backdrop rather than transparency, so a white bar
- * hides the edge.
+ * Dark forest bar so the white-backed logos sit on a plate instead of
+ * floating on a cheap white strip. Gold rule marks the club line.
  */
 export function TopBar() {
   return (
-    <header className="border-b border-border bg-white">
-      <div className="mx-auto flex max-w-[960px] items-center gap-4 px-5 py-3">
-        <img
-          src="/teegle-golf-logo.png"
-          alt="Teegle Golf"
-          className="h-11 w-auto shrink-0 object-contain"
-        />
-
-        <div className="h-9 w-px shrink-0 bg-border" aria-hidden />
-
-        <div className="flex min-w-0 items-center gap-2.5">
+    <header className="bg-forest text-white">
+      <div className="mx-auto flex max-w-[960px] items-center gap-4 px-5 py-3.5">
+        <div className="flex items-center gap-3 rounded-md bg-white px-2.5 py-1.5">
+          <img
+            src="/teegle-golf-logo.png"
+            alt="Teegle Golf"
+            className="h-9 w-auto shrink-0 object-contain"
+          />
+          <div className="h-8 w-px shrink-0 bg-border" aria-hidden />
           <img
             src="/vga-seal.png"
             alt="Veteran Golfers Association"
-            className="size-11 shrink-0 object-contain"
+            className="size-10 shrink-0 object-contain"
           />
-          <div className="min-w-0 leading-tight">
-            <p className="truncate text-base font-semibold text-ink">
-              {currentStateName()}
-            </p>
-            <p className="truncate text-sm text-ink-soft">Course Directory</p>
-          </div>
         </div>
 
-        <div className="ml-auto flex shrink-0 items-center gap-3">
-          <span className="hidden text-base text-ink-soft sm:inline">
-            {CURRENT_DIRECTOR}
-          </span>
+        <div className="min-w-0 leading-tight">
+          <p className="truncate font-display text-lg font-semibold tracking-tight">
+            VGA Idaho
+          </p>
+          <p className="truncate text-sm text-white/70">
+            Stroke play · Tournament desk
+          </p>
+        </div>
+
+        <div className="ml-auto hidden shrink-0 sm:block">
+          <p className="text-right text-sm text-white/55">Director</p>
+          <p className="text-right text-base text-white/90">{CURRENT_DIRECTOR}</p>
         </div>
       </div>
+      <div className="h-0.5 bg-gold" aria-hidden />
     </header>
   )
 }

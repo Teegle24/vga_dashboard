@@ -5,6 +5,12 @@ export type StateCode = 'ID'
 /** Where a row came from. `sample` rows are demo data and say so in the UI. */
 export type DataSource = 'manual' | 'sample'
 
+/**
+ * Where a stroke-play tournament sits in the director's job:
+ * call the course, hold the times, confirm the field, then it's played.
+ */
+export type TournamentStatus = 'reaching_out' | 'held' | 'confirmed' | 'complete'
+
 export interface CourseContact {
   contactName: string | null
   email: string | null
@@ -30,10 +36,16 @@ export interface Course {
   teegleCourseId: string | null
   /** Standard published rate, director-maintained. */
   listRate: number | null
-  /** Derived from the most recent logged event. Never edited by hand. */
+  /** Derived from the most recent completed tournament. Never edited by hand. */
   lastNegotiatedRate: number | null
   lastEventDate: string | null
   contact: CourseContact
+}
+
+/** One starting-hole group. VGA plays stroke play in foursomes. */
+export interface TeeGroup {
+  teeTime: string
+  players: string[]
 }
 
 export interface EventRecord {
@@ -44,11 +56,19 @@ export interface EventRecord {
   name: string
   /** Calendar day, `YYYY-MM-DD`. Not a timestamp. */
   eventDate: string
+  status: TournamentStatus
   headcount: number | null
+  /** Quoted when the date is held. Becomes ratePaid once the round is played. */
+  rateQuoted: number | null
   ratePaid: number | null
-  isTournament: boolean
+  firstTeeTime: string | null
+  groupsHeld: number | null
   headcountSentAt: string | null
   teeSheetSentAt: string | null
+  /** Participant texts, 3–5 days out. Separate from any course-alert list. */
+  alertsOn: boolean
+  alertSentAt: string | null
+  teeGroups: TeeGroup[] | null
   source: DataSource
   waitlistCount: number
   updatedBy: string | null
@@ -79,8 +99,9 @@ export interface NewEventInput {
   name: string
   eventDate: string
   headcount: number | null
-  ratePaid: number | null
-  isTournament: boolean
+  rateQuoted: number | null
+  firstTeeTime: string | null
+  groupsHeld: number | null
 }
 
 export interface ContactInput {
@@ -95,10 +116,4 @@ export interface ContactInput {
 export interface FeedbackInput {
   message: string
   context?: Record<string, unknown>
-}
-
-/** Tee sheet row in the shape courses expect over email. */
-export interface TeeSheetRow {
-  teeTime: string
-  players: string
 }

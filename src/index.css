@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", "Times New Roman", ui-serif, Georgia, serif;
 
   --color-background: var(--canvas);
   --color-foreground: var(--ink);
@@ -11,13 +11,17 @@
   --color-muted-foreground: var(--ink-soft);
   --color-border: var(--border);
   --color-input: var(--input);
-  --color-ring: var(--brand);
+  --color-ring: var(--gold);
 
   --color-brand: var(--brand);
   --color-brand-2: var(--brand-2);
   --color-brand-soft: var(--brand-soft);
-  --color-accent: var(--accent);
-  --color-accent-soft: var(--accent-soft);
+  --color-accent: var(--gold);
+  --color-accent-soft: var(--gold-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-forest: var(--forest);
+  --color-forest-2: var(--forest-2);
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);
   --color-danger: var(--danger);
@@ -27,23 +31,24 @@
 }
 
 :root {
-  --radius: 0.5rem;
+  --radius: 0.4rem;
 
-  /* Sampled from the Teegle Golf logo */
+  --forest: #12210c;
+  --forest-2: #1b3012;
   --brand: #2b5910;
   --brand-2: #3a7517;
-  --brand-soft: #eef4e8;
-  --accent: #cfad32;
-  --accent-soft: #faf4e0;
+  --brand-soft: #e7efe0;
+  --gold: #c4a046;
+  --gold-soft: #f6eed6;
 
-  --canvas: #fafaf7;
-  --card: #ffffff;
-  --muted: #f2f3ee;
-  --ink: #14170f;
-  --ink-soft: #55604b;
-  --border: #dfe2d8;
-  --input: #cdd2c4;
-  --danger: #9b2226;
+  --canvas: #efe6d4;
+  --card: #fffdf8;
+  --muted: #f3ead8;
+  --ink: #16140e;
+  --ink-soft: #5c5646;
+  --border: #d4c6a8;
+  --input: #c4b592;
+  --danger: #8c1d22;
 }
 
 * {
@@ -51,29 +56,32 @@
 }
 
 html {
-  /* Larger base size: the primary users are older directors on phones */
   font-size: 18px;
   -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
-  background: var(--canvas);
   color: var(--ink);
   font-family: var(--font-sans);
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+  background-color: var(--canvas);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(196, 160, 70, 0.12), transparent),
+    linear-gradient(180deg, #f3ead8 0%, #efe6d4 28%, #ebe2cf 100%);
 }
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
   font-family: var(--font-display);
-  letter-spacing: -0.01em;
-  line-height: 1.2;
+  font-optical-sizing: auto;
+  letter-spacing: -0.018em;
+  line-height: 1.15;
 }
 
-/* Never shrink form text on iOS, and keep tap targets honest */
 input,
 select,
 textarea,
@@ -83,7 +91,7 @@ button {
 }
 
 :focus-visible {
-  outline: 3px solid var(--brand-2);
+  outline: 3px solid var(--gold);
   outline-offset: 2px;
 }
 

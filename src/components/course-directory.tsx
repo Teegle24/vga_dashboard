@@ -4,7 +4,7 @@ import type { Course, EventRecord } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { ContactCard } from '@/components/contact-card'
-import { QuickEventForm } from '@/components/quick-event-form'
+import { HoldDateForm } from '@/components/hold-date-form'
 import { useDeleteEvent, useRestoreEvent } from '@/data/hooks'
 import { formatDate, isPast } from '@/lib/dates'
 import { formatMoney, formatPhone } from '@/lib/format'
@@ -27,7 +27,7 @@ function EventHistory({
   if (past.length === 0) {
     return (
       <p className="text-base text-ink-soft">
-        No events logged here yet. Add one above and the rate history fills in.
+        No tournaments logged here yet. Hold a date above and the rate history fills in.
       </p>
     )
   }
@@ -126,12 +126,12 @@ function CourseRow({
           <ContactCard course={course} />
 
           <div className="grid gap-4 rounded-lg border border-border bg-canvas p-4">
-            <h4 className="text-lg font-semibold text-ink">Log an event</h4>
-            <QuickEventForm course={course} />
+            <h4 className="text-lg font-semibold text-ink">Hold a date here</h4>
+            <HoldDateForm course={course} />
           </div>
 
           <div className="grid gap-3">
-            <h4 className="text-lg font-semibold text-ink">Past events here</h4>
+            <h4 className="text-lg font-semibold text-ink">Played here</h4>
             {justDeleted ? (
               <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-accent bg-accent-soft px-4 py-3">
                 <span className="text-base text-ink">

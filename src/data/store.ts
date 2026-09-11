@@ -23,7 +23,7 @@ import { currentStateCode } from '@/lib/state'
  * before showing someone new.
  */
 
-const STORAGE_KEY = 'vga-dashboard.v1'
+const STORAGE_KEY = 'vga-dashboard.v2'
 
 /** Whoever is driving the demo. Becomes a real signed-in user later. */
 export const CURRENT_DIRECTOR = 'Mark Brinkman'
@@ -114,6 +114,7 @@ export function logEvent(input: NewEventInput): DashboardData {
   const course = s.courses.find((c) => c.id === input.courseId)
   if (!course) throw new Error('Course not found')
 
+  const past = input.eventDate < todayInIdaho()
   s.events.push({
     id: `evt-${Date.now()}`,
     courseId: input.courseId,
@@ -121,11 +122,17 @@ export function logEvent(input: NewEventInput): DashboardData {
     stateCode: currentStateCode(),
     name: input.name,
     eventDate: input.eventDate,
+    status: past ? 'complete' : input.headcount ? 'held' : 'reaching_out',
     headcount: input.headcount,
-    ratePaid: input.ratePaid,
-    isTournament: input.isTournament,
+    rateQuoted: input.rateQuoted,
+    ratePaid: past ? input.rateQuoted : null,
+    firstTeeTime: input.firstTeeTime,
+    groupsHeld: input.groupsHeld,
     headcountSentAt: null,
     teeSheetSentAt: null,
+    alertsOn: false,
+    alertSentAt: null,
+    teeGroups: null,
     source: 'manual',
     waitlistCount: 0,
     updatedBy: CURRENT_DIRECTOR,

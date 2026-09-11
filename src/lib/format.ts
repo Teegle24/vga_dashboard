@@ -41,3 +41,18 @@ export function formatHeadcount(count: number | null | undefined): string {
   if (count === null || count === undefined) return '—'
   return `${count} ${count === 1 ? 'player' : 'players'}`
 }
+
+export function statusLabel(
+  status: 'reaching_out' | 'held' | 'confirmed' | 'complete',
+): string {
+  switch (status) {
+    case 'reaching_out':
+      return 'Calling the course'
+    case 'held':
+      return 'Date held'
+    case 'confirmed':
+      return 'Field set'
+    case 'complete':
+      return 'Played'
+  }
+}

@@ -47,17 +47,17 @@ function exportEverything(data: DashboardData) {
   downloadCsv('vga-idaho-courses.csv', courseRows)
 
   const eventRows = [
-    ['Event', 'Course', 'Date', 'Players', 'Rate paid', 'Tournament'],
+    ['Tournament', 'Course', 'Date', 'Status', 'Players', 'Rate paid'],
     ...data.events.map((e) => [
       e.name,
       e.courseName,
       e.eventDate,
+      e.status,
       e.headcount?.toString() ?? '',
       e.ratePaid?.toString() ?? '',
-      e.isTournament ? 'Yes' : 'No',
     ]),
   ]
-  downloadCsv('vga-idaho-events.csv', eventRows)
+  downloadCsv('vga-idaho-tournaments.csv', eventRows)
 }
 
 /**
@@ -103,7 +103,7 @@ function StartOver() {
 
 export function Footer({ data }: { data?: DashboardData }) {
   return (
-    <footer className="mt-14 border-t border-border bg-white">
+    <footer className="mt-14 border-t border-border bg-forest text-white">
       <div className="mx-auto flex max-w-[960px] flex-col gap-6 px-5 py-8">
         <div className="flex flex-wrap gap-3">
           <FeedbackButton />
@@ -118,8 +118,8 @@ export function Footer({ data }: { data?: DashboardData }) {
           <StartOver />
         </div>
 
-        <p className="text-sm text-ink-soft">
-          Teegle Golf · Built for the Veteran Golfers Association, Idaho
+        <p className="text-sm text-white/60">
+          Teegle Golf · Veteran Golfers Association, Idaho · Stroke play
         </p>
       </div>
     </footer>

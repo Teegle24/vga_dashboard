@@ -1,68 +1,96 @@
-import type { EventRecord } from '@/types'
+import type { EventRecord, TeeGroup } from '@/types'
 import { formatDate } from '@/lib/dates'
 
 /**
- * Builds the tee sheet VGA emails to a course a couple of days before an event.
- * Groups are foursomes on a shotgun-style interval; player names are left blank
- * because the roster lives in Golf Genius, and Mark fills them in before sending.
+ * Stroke-play tee sheet: foursomes off the first tee at a regular interval.
+ * VGA does not play scramble or shotgun starts.
  */
 
-const GROUP_SIZE = 4
-const INTERVAL_MINUTES = 10
-const DEFAULT_START = '08:00'
+export const GROUP_SIZE = 4
+export const INTERVAL_MINUTES = 10
+export const DEFAULT_START = '08:00'
 
-function addMinutes(time: string, minutes: number): string {
+function parseMinutes(time: string): number {
   const [h, m] = time.split(':').map(Number)
-  const total = (h ?? 0) * 60 + (m ?? 0) + minutes
-  const hh = Math.floor(total / 60) % 24
+  return (h ?? 8) * 60 + (m ?? 0)
+}
+
+export function formatTeeTime(minutes: number): string {
+  const total = ((minutes % (24 * 60)) + 24 * 60) % (24 * 60)
+  const hh = Math.floor(total / 60)
   const mm = total % 60
   const suffix = hh >= 12 ? 'PM' : 'AM'
   const display = hh % 12 === 0 ? 12 : hh % 12
   return `${display}:${String(mm).padStart(2, '0')} ${suffix}`
 }
 
-export function buildTeeSheet(
-  event: EventRecord,
-  startTime: string = DEFAULT_START,
-): string {
-  const headcount = event.headcount ?? 0
-  const groups = Math.max(1, Math.ceil(headcount / GROUP_SIZE))
+export function toInputTime(displayOrInput: string): string {
+  if (/^\d{1,2}:\d{2}$/.test(displayOrInput)) {
+    const [h, m] = displayOrInput.split(':')
+    return `${String(h).padStart(2, '0')}:${m}`
+  }
+  return displayOrInput
+}
 
+export function generateTeeGroups(
+  headcount: number,
+  firstTeeTime: string = DEFAULT_START,
+): TeeGroup[] {
+  const players = Math.max(0, headcount)
+  const groups = Math.max(1, Math.ceil((players || GROUP_SIZE) / GROUP_SIZE))
+  const start = parseMinutes(toInputTime(firstTeeTime))
+  let remaining = players
+
+  return Array.from({ length: groups }, (_, i) => {
+    const inGroup = players === 0 ? 0 : Math.min(GROUP_SIZE, remaining)
+    remaining -= inGroup
+    return {
+      teeTime: formatTeeTime(start + i * INTERVAL_MINUTES),
+      players: Array.from({ length: GROUP_SIZE }, (_, slot) =>
+        slot < inGroup ? '' : '',
+      ),
+    }
+  })
+}
+
+export function groupsForEvent(event: EventRecord): TeeGroup[] {
+  if (event.teeGroups && event.teeGroups.length > 0) return event.teeGroups
+  const count = event.headcount ?? (event.groupsHeld ?? 0) * GROUP_SIZE
+  return generateTeeGroups(count, event.firstTeeTime ?? DEFAULT_START)
+}
+
+export function downloadTeeSheet(event: EventRecord) {
+  const groups = groupsForEvent(event)
+  const filled = groups.reduce(
+    (sum, g) => sum + g.players.filter((p) => p.trim()).length,
+    0,
+  )
   const lines: string[] = [
     `${event.name} — Veteran Golfers Association, Idaho`,
+    'Stroke play',
     event.courseName,
     formatDate(event.eventDate),
-    `Total players: ${headcount}`,
+    `Players listed: ${filled || event.headcount || 0}`,
     '',
     'Tee Time, Group, Player 1, Player 2, Player 3, Player 4',
   ]
 
-  let remaining = headcount
-  for (let i = 0; i < groups; i += 1) {
-    const inGroup = Math.min(GROUP_SIZE, remaining)
-    remaining -= inGroup
-    const slots = Array.from({ length: GROUP_SIZE }, (_, slot) =>
-      slot < inGroup ? '' : '(open)',
+  groups.forEach((group, i) => {
+    const slots = Array.from(
+      { length: GROUP_SIZE },
+      (_, slot) => group.players[slot]?.trim() || '',
     )
-    lines.push(
-      [addMinutes(startTime, i * INTERVAL_MINUTES), `Group ${i + 1}`, ...slots].join(
-        ', ',
-      ),
-    )
-  }
+    lines.push([group.teeTime, `Group ${i + 1}`, ...slots].join(', '))
+  })
 
-  lines.push('', 'Questions: contact the VGA Idaho director listed on this event.')
-  return lines.join('\n')
-}
+  lines.push('', 'Questions: contact the VGA Idaho director listed on this tournament.')
 
-export function downloadTeeSheet(event: EventRecord) {
-  const contents = buildTeeSheet(event)
   const safeName = `${event.courseName}-${event.eventDate}`
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
 
-  const blob = new Blob([contents], { type: 'text/csv;charset=utf-8' })
+  const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8' })
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url

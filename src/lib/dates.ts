@@ -38,6 +38,12 @@ export function isHeadcountDue(isoDate: string, now: Date = new Date()): boolean
   return days >= 6 && days <= 8
 }
 
+/** Player reminder window: text the field 3–5 days before the round. */
+export function isAlertDue(isoDate: string, now: Date = new Date()): boolean {
+  const days = daysUntil(isoDate, now)
+  return days >= 3 && days <= 5
+}
+
 export function isPast(isoDate: string, now: Date = new Date()): boolean {
   return daysUntil(isoDate, now) < 0
 }

@@ -1,30 +1,28 @@
 import { cn } from '@/lib/utils'
 
-export type DashboardTab = 'courses' | 'coming-up'
+export type DashboardTab = 'plan' | 'courses' | 'tournaments'
 
 const TABS: { id: DashboardTab; label: string }[] = [
+  { id: 'plan', label: 'Plan' },
   { id: 'courses', label: 'Courses' },
-  { id: 'coming-up', label: 'Coming up' },
+  { id: 'tournaments', label: 'Tournaments' },
 ]
 
 export function TabBar({
   value,
   onChange,
-  comingUpBadge,
+  noticeCount,
 }: {
   value: DashboardTab
   onChange: (tab: DashboardTab) => void
-  comingUpBadge?: number
+  noticeCount?: number
 }) {
   return (
-    <nav
-      aria-label="What to look at"
-      className="border-b border-border bg-white"
-    >
-      <div className="mx-auto grid max-w-[960px] grid-cols-2 gap-2 px-5 py-3">
+    <nav aria-label="What to look at" className="bg-forest-2">
+      <div className="mx-auto grid max-w-[960px] grid-cols-3 gap-1.5 px-4 py-2.5">
         {TABS.map((tab) => {
           const selected = value === tab.id
-          const badge = tab.id === 'coming-up' ? comingUpBadge : undefined
+          const badge = tab.id === 'plan' ? noticeCount : undefined
 
           return (
             <button
@@ -34,18 +32,18 @@ export function TabBar({
               aria-selected={selected}
               onClick={() => onChange(tab.id)}
               className={cn(
-                'inline-flex min-h-14 items-center justify-center gap-2.5 rounded-md px-4 text-lg font-semibold transition-colors',
+                'inline-flex min-h-14 items-center justify-center gap-2 rounded-md px-3 text-base font-semibold',
                 selected
-                  ? 'bg-brand text-white'
-                  : 'bg-muted text-ink hover:bg-brand-soft',
+                  ? 'bg-gold text-forest'
+                  : 'bg-white/10 text-white/90 hover:bg-white/16',
               )}
             >
               {tab.label}
               {badge && badge > 0 ? (
                 <span
                   className={cn(
-                    'inline-flex min-w-7 items-center justify-center rounded-full px-2 py-0.5 text-sm font-semibold',
-                    selected ? 'bg-white text-brand' : 'bg-accent text-ink',
+                    'inline-flex min-w-6 items-center justify-center rounded-full px-1.5 py-0.5 text-xs font-bold',
+                    selected ? 'bg-forest text-gold' : 'bg-gold text-forest',
                   )}
                 >
                   {badge}

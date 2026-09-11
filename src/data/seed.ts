@@ -64,25 +64,34 @@ function courseName(slug: string) {
   return seedCourses.find((c) => c.id === slug)?.name ?? 'Unknown course'
 }
 
-export const seedEvents: EventRecord[] = EVENT_SEEDS.map((seed, index) => ({
-  id: `evt-${index + 1}`,
-  courseId: seed.courseSlug,
-  courseName: courseName(seed.courseSlug),
-  stateCode: 'ID',
-  name: seed.name,
-  eventDate: day(seed.offsetDays),
-  headcount: seed.headcount,
-  ratePaid: seed.ratePaid,
-  isTournament: seed.isTournament,
-  headcountSentAt: seed.headcountSent
-    ? ago(Math.abs(seed.offsetDays) + 7)
-    : null,
-  teeSheetSentAt: seed.teeSheetSent ? ago(Math.abs(seed.offsetDays) + 2) : null,
-  source: 'sample',
-  waitlistCount: 0,
-  updatedBy: 'Mark Brinkman',
-  updatedAt: ago(Math.max(1, Math.abs(seed.offsetDays) - 2)),
-}))
+export const seedEvents: EventRecord[] = EVENT_SEEDS.map((seed, index) => {
+  const past = seed.offsetDays < 0
+  return {
+    id: `evt-${index + 1}`,
+    courseId: seed.courseSlug,
+    courseName: courseName(seed.courseSlug),
+    stateCode: 'ID',
+    name: seed.name,
+    eventDate: day(seed.offsetDays),
+    status: past ? 'complete' : seed.headcount ? 'held' : 'reaching_out',
+    headcount: seed.headcount,
+    rateQuoted: seed.ratePaid,
+    ratePaid: seed.ratePaid,
+    firstTeeTime: seed.firstTeeTime ?? null,
+    groupsHeld: seed.groupsHeld ?? null,
+    headcountSentAt: seed.headcountSent
+      ? ago(Math.abs(seed.offsetDays) + 7)
+      : null,
+    teeSheetSentAt: seed.teeSheetSent ? ago(Math.abs(seed.offsetDays) + 2) : null,
+    alertsOn: seed.alertsOn ?? false,
+    alertSentAt: null,
+    teeGroups: null,
+    source: 'sample',
+    waitlistCount: 0,
+    updatedBy: 'Mark Brinkman',
+    updatedAt: ago(Math.max(1, Math.abs(seed.offsetDays) - 2)),
+  }
+})
 
 export const seedWaitlist: WaitlistEntry[] = WAITLIST_SEEDS.map(
   (seed, index) => {
