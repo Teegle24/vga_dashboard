@@ -114,7 +114,11 @@ export function Dashboard() {
             description="Tournaments and events ahead, soonest first."
             action={
               dueSoon.length > 0 ? (
-                <Pill tone="due">{dueSoon.length} need a headcount</Pill>
+                <Pill tone="due">
+                  {dueSoon.length === 1
+                    ? '1 course needs a headcount'
+                    : `${dueSoon.length} courses need a headcount`}
+                </Pill>
               ) : undefined
             }
           />
