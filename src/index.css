@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+
+  --color-background: var(--canvas);
+  --color-foreground: var(--ink);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--ink-soft);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--brand);
+
+  --color-brand: var(--brand);
+  --color-brand-2: var(--brand-2);
+  --color-brand-soft: var(--brand-soft);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-danger: var(--danger);
+
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.5rem;
+
+  /* Sampled from the Teegle Golf logo */
+  --brand: #2b5910;
+  --brand-2: #3a7517;
+  --brand-soft: #eef4e8;
+  --accent: #cfad32;
+  --accent-soft: #faf4e0;
+
+  --canvas: #fafaf7;
+  --card: #ffffff;
+  --muted: #f2f3ee;
+  --ink: #14170f;
+  --ink-soft: #55604b;
+  --border: #dfe2d8;
+  --input: #cdd2c4;
+  --danger: #9b2226;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  /* Larger base size: the primary users are older directors on phones */
+  font-size: 18px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+/* Never shrink form text on iOS, and keep tap targets honest */
+input,
+select,
+textarea,
+button {
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+:focus-visible {
+  outline: 3px solid var(--brand-2);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,164 @@
+import { useState } from 'react'
+import { ArrowDown, ArrowUp, Check, Plus, Trash2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { TextField } from '@/components/ui/field'
+import {
+  useAddWaitlistEntry,
+  usePatchWaitlistEntry,
+  useRemoveWaitlistEntry,
+  useWaitlist,
+} from '@/api/hooks'
+import { formatPhone, telHref } from '@/lib/format'
+
+/**
+ * Ranked standby list for filling last-minute no-shows. Reordering is explicit
+ * up/down buttons rather than drag-and-drop, which is unreliable on a phone and
+ * unforgiving for anyone with a shaky hand.
+ */
+export function WaitlistPanel({ eventId }: { eventId: string }) {
+  const { data: entries = [], isLoading } = useWaitlist(eventId)
+  const add = useAddWaitlistEntry()
+  const patch = usePatchWaitlistEntry()
+  const remove = useRemoveWaitlistEntry()
+
+  const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
+
+  const waiting = entries.filter((e) => e.status === 'waiting')
+
+  function submit() {
+    if (!name.trim()) return
+    add.mutate(
+      { eventId, memberName: name.trim(), phone: phone.trim() || null },
+      {
+        onSuccess: () => {
+          setName('')
+          setPhone('')
+        },
+      },
+    )
+  }
+
+  return (
+    <div className="grid gap-4 rounded-lg border border-border bg-canvas p-4">
+      <h4 className="text-lg font-semibold text-ink">
+        Standby list
+        {waiting.length ? (
+          <span className="ml-2 font-normal text-ink-soft">
+            {waiting.length} waiting
+          </span>
+        ) : null}
+      </h4>
+
+      {isLoading ? (
+        <p className="text-base text-ink-soft">Loading…</p>
+      ) : entries.length === 0 ? (
+        <p className="text-base text-ink-soft">
+          Nobody on standby yet. Add the first person below.
+        </p>
+      ) : (
+        <ol className="grid gap-2">
+          {entries.map((entry, index) => (
+            <li
+              key={entry.id}
+              className="flex flex-wrap items-center gap-3 rounded-md bg-white px-3 py-3"
+            >
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-soft text-base font-semibold text-brand">
+                {entry.rank}
+              </span>
+
+              <span className="min-w-0 flex-1">
+                <span className="block text-lg font-medium text-ink">
+                  {entry.memberName}
+                  {entry.status === 'filled' ? (
+                    <span className="ml-2 text-base font-normal text-brand">
+                      got the spot
+                    </span>
+                  ) : null}
+                  {entry.status === 'declined' ? (
+                    <span className="ml-2 text-base font-normal text-ink-soft">
+                      passed
+                    </span>
+                  ) : null}
+                </span>
+                {entry.phone ? (
+                  <a
+                    href={telHref(entry.phone) ?? undefined}
+                    className="block text-base text-brand underline-offset-2 hover:underline"
+                  >
+                    {formatPhone(entry.phone)}
+                  </a>
+                ) : null}
+              </span>
+
+              <span className="flex shrink-0 items-center gap-1">
+                <button
+                  type="button"
+                  aria-label={`Move ${entry.memberName} up`}
+                  disabled={index === 0}
+                  onClick={() => patch.mutate({ id: entry.id, direction: 'up' })}
+                  className="flex size-12 items-center justify-center rounded-md text-ink-soft hover:bg-muted disabled:opacity-30"
+                >
+                  <ArrowUp className="size-5" aria-hidden />
+                </button>
+                <button
+                  type="button"
+                  aria-label={`Move ${entry.memberName} down`}
+                  disabled={index === entries.length - 1}
+                  onClick={() =>
+                    patch.mutate({ id: entry.id, direction: 'down' })
+                  }
+                  className="flex size-12 items-center justify-center rounded-md text-ink-soft hover:bg-muted disabled:opacity-30"
+                >
+                  <ArrowDown className="size-5" aria-hidden />
+                </button>
+                <button
+                  type="button"
+                  aria-label={`${entry.memberName} got the spot`}
+                  onClick={() => patch.mutate({ id: entry.id, status: 'filled' })}
+                  className="flex size-12 items-center justify-center rounded-md text-brand hover:bg-brand-soft"
+                >
+                  <Check className="size-5" aria-hidden />
+                </button>
+                <button
+                  type="button"
+                  aria-label={`Remove ${entry.memberName}`}
+                  onClick={() => remove.mutate(entry.id)}
+                  className="flex size-12 items-center justify-center rounded-md text-ink-soft hover:bg-muted"
+                >
+                  <Trash2 className="size-5" aria-hidden />
+                </button>
+              </span>
+            </li>
+          ))}
+        </ol>
+      )}
+
+      <div className="grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
+        <TextField
+          label="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Member name"
+        />
+        <TextField
+          label="Phone"
+          hint="Optional"
+          type="tel"
+          inputMode="tel"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder="208-555-0100"
+        />
+        <Button
+          variant="secondary"
+          onClick={submit}
+          disabled={!name.trim() || add.isPending}
+        >
+          <Plus className="size-5" aria-hidden />
+          Add
+        </Button>
+      </div>
+    </div>
+  )
+}
