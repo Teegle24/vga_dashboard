@@ -96,7 +96,7 @@ function SeasonRow({
       <button
         type="button"
         onClick={() => onOpenTournament(slot.booked!.id)}
-        className="grid w-full gap-1 rounded-lg border border-border bg-card px-5 py-4 text-left backdrop-blur-md hover:bg-white/30"
+        className="grid w-full gap-1 rounded-lg border border-border bg-card px-5 py-4 text-left hover:bg-muted"
       >
         <span className="flex flex-wrap items-center justify-between gap-2">
           <span className="text-lg font-semibold text-ink">{slot.name}</span>

@@ -46,7 +46,7 @@ export function FieldPanel({
   const over = spotsHeld != null && players.length > spotsHeld
 
   return (
-    <div className="grid min-w-0 gap-4 rounded-lg border border-border bg-white/20 p-4 backdrop-blur-md">
+    <div className="grid min-w-0 gap-4 rounded-lg border border-border bg-muted p-4">
       <h4 className="text-lg font-semibold text-ink">
         Current field
         <span className="ml-2 font-normal text-ink-soft">
@@ -98,7 +98,7 @@ export function FieldPanel({
           {players.map((player, index) => (
             <li
               key={player.id}
-              className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 rounded-md bg-white/30 px-2.5 py-2"
+              className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 rounded-md bg-white px-2.5 py-2"
             >
               <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-soft text-sm font-semibold text-brand">
                 {index + 1}

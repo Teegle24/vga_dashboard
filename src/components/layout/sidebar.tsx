@@ -39,9 +39,9 @@ export function Sidebar({
   noticeCount?: number
 }) {
   return (
-    <aside className="bg-forest/72 text-white backdrop-blur-xl lg:flex lg:h-dvh lg:w-72 lg:shrink-0 lg:flex-col lg:sticky lg:top-0">
+    <aside className="bg-forest text-white lg:flex lg:h-dvh lg:w-72 lg:shrink-0 lg:flex-col lg:sticky lg:top-0">
       <div className="border-b border-white/10 px-5 py-4">
-        <div className="flex items-center gap-2.5 rounded-md bg-white/80 px-2.5 py-1.5 backdrop-blur-sm">
+        <div className="flex items-center gap-2.5 rounded-md bg-white px-2.5 py-1.5">
           <img
             src="/teegle-golf-logo.png"
             alt="Teegle Golf"
@@ -76,8 +76,8 @@ export function Sidebar({
               className={cn(
                 'flex min-h-16 items-center gap-3 rounded-md px-3 text-left',
                 selected
-                  ? 'bg-gold/72 text-forest backdrop-blur-sm'
-                  : 'text-white/90 hover:bg-white/10',
+                  ? 'bg-white text-ink'
+                  : 'text-white hover:bg-white/10',
               )}
             >
               <Icon className="size-6 shrink-0" aria-hidden />
@@ -88,7 +88,7 @@ export function Sidebar({
                     <span
                       className={cn(
                         'inline-flex min-w-6 items-center justify-center rounded-full px-1.5 py-0.5 text-xs font-bold',
-                        selected ? 'bg-forest text-gold' : 'bg-gold text-forest',
+                        selected ? 'bg-brand text-white' : 'bg-brand text-white',
                       )}
                     >
                       {badge}
@@ -98,7 +98,7 @@ export function Sidebar({
                 <span
                   className={cn(
                     'block text-sm',
-                    selected ? 'text-forest/70' : 'text-white/55',
+                    selected ? 'text-ink-soft' : 'text-white/60',
                   )}
                 >
                   {item.hint}
@@ -113,7 +113,7 @@ export function Sidebar({
         <p className="text-sm text-white/50">Director</p>
         <p className="text-base text-white/90">{CURRENT_DIRECTOR}</p>
       </div>
-      <div className="h-0.5 bg-gold lg:hidden" aria-hidden />
+      <div className="h-0.5 bg-brand lg:hidden" aria-hidden />
     </aside>
   )
 }

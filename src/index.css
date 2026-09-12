@@ -33,22 +33,22 @@
 :root {
   --radius: 0.4rem;
 
-  --forest: #1a2c16;
-  --forest-2: #243a1e;
-  --brand: #3a6a1c;
-  --brand-2: #4a7f26;
-  --brand-soft: rgba(43, 89, 16, 0.08);
-  --gold: #c4a046;
-  --gold-soft: rgba(196, 160, 70, 0.12);
+  --forest: #1f2937;
+  --forest-2: #111827;
+  --brand: #2563eb;
+  --brand-2: #1d4ed8;
+  --brand-soft: rgba(37, 99, 235, 0.1);
+  --gold: #2563eb;
+  --gold-soft: rgba(37, 99, 235, 0.1);
 
-  --canvas: #efe6d4;
-  --card: rgba(255, 251, 244, 0.24);
-  --muted: rgba(255, 255, 255, 0.16);
-  --ink: #16140e;
-  --ink-soft: #5c5646;
-  --border: rgba(122, 108, 78, 0.16);
-  --input: rgba(122, 108, 78, 0.2);
-  --danger: #8c1d22;
+  --canvas: #f3f4f6;
+  --card: #ffffff;
+  --muted: #f3f4f6;
+  --ink: #111827;
+  --ink-soft: #4b5563;
+  --border: #d1d5db;
+  --input: #9ca3af;
+  --danger: #dc2626;
 }
 
 * {
@@ -67,23 +67,6 @@ body {
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   background-color: var(--canvas);
-  background-image:
-    radial-gradient(ellipse 72% 52% at 78% 4%, rgba(196, 160, 70, 0.46), transparent 58%),
-    radial-gradient(ellipse 58% 48% at 6% 22%, rgba(58, 106, 28, 0.16), transparent 56%),
-    radial-gradient(ellipse 64% 42% at 88% 72%, rgba(196, 160, 70, 0.24), transparent 58%),
-    radial-gradient(ellipse 44% 34% at 22% 88%, rgba(26, 44, 22, 0.1), transparent 64%),
-    linear-gradient(165deg, #f7f1e4 0%, #eadcbd 46%, #e5d4b0 100%);
-}
-
-body::before {
-  content: '';
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background:
-    radial-gradient(circle at 84% 12%, rgba(196, 160, 70, 0.28), transparent 28%),
-    radial-gradient(circle at 12% 68%, rgba(58, 106, 28, 0.1), transparent 30%);
 }
 
 h1,
@@ -105,7 +88,7 @@ button {
 }
 
 :focus-visible {
-  outline: 3px solid var(--gold);
+  outline: 3px solid var(--brand);
   outline-offset: 2px;
 }
 

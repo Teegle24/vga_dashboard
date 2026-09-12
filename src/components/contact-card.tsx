@@ -115,7 +115,7 @@ export function ContactCard({ course }: { course: Course }) {
       </div>
 
       {/* Course Contact */}
-      <div className="rounded-lg border border-border bg-white/20 p-4 backdrop-blur-md">
+      <div className="rounded-lg border border-border bg-muted p-4">
         <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
           <h4 className="text-lg font-semibold text-ink">Course Contact</h4>
           {hasContact ? (
@@ -194,7 +194,7 @@ export function ContactCard({ course }: { course: Course }) {
                   />
                 ) : null}
                 {course.contact.notes ? (
-                  <p className="mt-2 rounded-md bg-white/40 px-3 py-3 text-base leading-relaxed text-ink backdrop-blur-sm">
+                  <p className="mt-2 rounded-md bg-white px-3 py-3 text-base leading-relaxed text-ink">
                     {course.contact.notes}
                   </p>
                 ) : null}
@@ -260,7 +260,7 @@ export function ContactCard({ course }: { course: Course }) {
       </div>
 
       {/* Rates */}
-      <div className="grid gap-4 rounded-lg border border-border bg-white/20 p-4 backdrop-blur-md sm:grid-cols-3">
+      <div className="grid gap-4 rounded-lg border border-border bg-muted p-4 sm:grid-cols-3">
         <div>
           <p className="text-sm text-ink-soft">List rate</p>
           <p className="text-xl font-semibold text-ink">

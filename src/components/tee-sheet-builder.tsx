@@ -72,7 +72,7 @@ export function TeeSheetBuilder({ event }: { event: EventRecord }) {
                       setPlayer(groupIndex, slot, e.target.value)
                     }
                     placeholder="Name"
-                    className="min-h-12 rounded-md border border-input bg-white/35 px-3 text-base text-ink backdrop-blur-sm"
+                    className="min-h-12 rounded-md border border-input bg-white px-3 text-base text-ink"
                   />
                 </label>
               ))}

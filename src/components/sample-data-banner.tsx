@@ -6,7 +6,7 @@ export function SampleDataBanner() {
   if (dismissed) return null
 
   return (
-    <div className="flex items-start gap-3 rounded-lg border border-gold/35 bg-gold-soft px-4 py-4 backdrop-blur-md">
+    <div className="flex items-start gap-3 rounded-lg border border-brand/30 bg-brand-soft px-4 py-4">
       <Info className="mt-0.5 size-6 shrink-0 text-ink" aria-hidden />
       <div className="min-w-0 flex-1">
         <p className="text-base font-semibold text-ink">
