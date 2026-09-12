@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { Bell, CalendarClock, FileSpreadsheet } from 'lucide-react'
 import type { EventRecord } from '@/types'
 import { Card } from '@/components/ui/card'
+import { Flourish } from '@/components/ui/flourish'
 import { isAlertDue, isHeadcountDue, describeWhen, formatDate } from '@/lib/dates'
 import { formatMoney } from '@/lib/format'
 import { SeasonPlanner } from '@/components/season-planner'
@@ -30,10 +31,11 @@ export function PlanBoard({
   return (
     <div className="grid gap-8">
       <div>
-        <p className="text-sm font-semibold uppercase tracking-[0.16em] text-gold">
+        <p className="text-sm font-semibold uppercase tracking-[0.16em] text-brand">
           VGA Idaho
         </p>
-        <h2 className="mt-2 font-display text-4xl font-semibold text-ink">
+        <Flourish className="mt-2" />
+        <h2 className="mt-3 font-display text-4xl font-semibold text-ink">
           Hold the date. Build the sheet. Alert the field.
         </h2>
         <p className="mt-3 max-w-2xl text-lg text-ink-soft">

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { Flourish } from '@/components/ui/flourish'
 import { cn } from '@/lib/utils'
 
 export function Card({
@@ -11,7 +12,7 @@ export function Card({
   return (
     <div
       className={cn(
-        'rounded-lg border border-border bg-card p-6 shadow-sm',
+        'rounded-lg border border-border border-t-[3px] border-t-brand bg-card p-6 shadow-sm',
         className,
       )}
     >
@@ -33,6 +34,7 @@ export function SectionHeading({
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
       <div>
         <h2 className="text-3xl font-semibold text-ink">{title}</h2>
+        <Flourish className="mt-2" />
         {description ? (
           <p className="mt-1.5 max-w-xl text-base text-ink-soft">{description}</p>
         ) : null}

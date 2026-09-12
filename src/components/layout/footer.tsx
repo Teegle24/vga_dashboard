@@ -115,7 +115,7 @@ function StartOver() {
 
 export function Footer({ data }: { data?: DashboardData }) {
   return (
-    <footer className="mt-14 border-t border-border bg-forest text-white">
+    <footer className="mt-14 border-t-[3px] border-t-brand bg-forest text-white">
       <div className="mx-auto flex max-w-[960px] flex-col gap-6 px-5 py-8">
         <div className="flex flex-wrap gap-3">
           <FeedbackButton />

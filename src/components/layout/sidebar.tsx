@@ -26,7 +26,7 @@ const ITEMS: {
   { id: 'tournaments', label: 'Tournaments', hint: 'Dates and tee sheets', icon: Flag },
   { id: 'courses', label: 'Courses', hint: 'Contacts and rates', icon: Landmark },
   { id: 'members', label: 'Members', hint: 'Flights and the field', icon: Users },
-  { id: 'history', label: 'History', hint: 'Played rounds and rates', icon: ScrollText },
+  { id: 'history', label: 'History', hint: 'Played rounds', icon: ScrollText },
 ]
 
 export function Sidebar({
@@ -39,27 +39,28 @@ export function Sidebar({
   noticeCount?: number
 }) {
   return (
-    <aside className="bg-forest text-white lg:flex lg:h-dvh lg:w-72 lg:shrink-0 lg:flex-col lg:sticky lg:top-0">
-      <div className="border-b border-white/10 px-5 py-4">
-        <div className="flex items-center gap-2.5 rounded-md bg-white px-2.5 py-1.5">
+    <aside className="relative bg-forest text-white shadow-[inset_-3px_0_0_0_#2563eb] lg:flex lg:h-dvh lg:w-60 lg:shrink-0 lg:flex-col lg:sticky lg:top-0">
+      <div className="border-b border-white/10 px-3 py-4">
+        <div className="flex items-center gap-1.5 rounded-md bg-white px-1.5 py-1.5">
           <img
             src="/teegle-golf-logo.png"
             alt="Teegle Golf"
-            className="h-8 w-auto shrink-0 object-contain"
+            className="h-7 w-auto shrink-0 object-contain"
           />
-          <div className="h-7 w-px shrink-0 bg-border" aria-hidden />
+          <div className="h-6 w-px shrink-0 bg-border" aria-hidden />
           <img
             src="/vga-seal.png"
             alt="Veteran Golfers Association"
-            className="size-9 shrink-0 object-contain"
+            className="size-8 shrink-0 object-contain"
           />
-          <div className="h-7 w-px shrink-0 bg-border" aria-hidden />
-          <IdahoMark className="h-11 w-auto shrink-0" />
+          <div className="h-6 w-px shrink-0 bg-border" aria-hidden />
+          <IdahoMark className="h-9 w-auto shrink-0" />
         </div>
         <p className="mt-4 font-display text-xl font-semibold tracking-tight">
           VGA Idaho
         </p>
-        <p className="text-sm text-white/65">Tournament desk</p>
+        <div className="mt-2 h-0.5 w-12 bg-brand" aria-hidden />
+        <p className="mt-2 text-sm text-white/65">Tournament desk</p>
       </div>
 
       <nav aria-label="Desk" className="grid gap-1.5 p-3 sm:grid-cols-2 lg:grid-cols-1 lg:flex-1">
@@ -76,7 +77,7 @@ export function Sidebar({
               className={cn(
                 'flex min-h-16 items-center gap-3 rounded-md px-3 text-left',
                 selected
-                  ? 'bg-white text-ink'
+                  ? 'bg-white text-ink shadow-[inset_4px_0_0_0_#2563eb]'
                   : 'text-white hover:bg-white/10',
               )}
             >
@@ -109,7 +110,7 @@ export function Sidebar({
         })}
       </nav>
 
-      <div className="hidden border-t border-white/10 px-5 py-4 lg:block">
+      <div className="hidden border-t border-white/10 px-3 py-4 lg:block">
         <p className="text-sm text-white/50">Director</p>
         <p className="text-base text-white/90">{CURRENT_DIRECTOR}</p>
       </div>
