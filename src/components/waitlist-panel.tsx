@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { ArrowDown, ArrowUp, Check, Plus, Trash2 } from 'lucide-react'
+import { FlightField } from '@/components/flight-field'
 import { Button } from '@/components/ui/button'
 import { TextField } from '@/components/ui/field'
 import {
@@ -10,7 +11,7 @@ import {
   useRemoveWaitlistEntry,
   useWaitlist,
 } from '@/data/hooks'
-import { flightForName, flightLabel } from '@/lib/flights'
+import { flightForName, flightLabel, type Flight } from '@/lib/flights'
 import { formatPhone, telHref } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
@@ -32,17 +33,33 @@ export function WaitlistPanel({ eventId }: { eventId: string }) {
 
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
+  const [flight, setFlight] = useState<Flight | ''>('')
+
+  function applyName(value: string) {
+    setName(value)
+    const match = members.find(
+      (member) => member.name.toLowerCase() === value.trim().toLowerCase(),
+    )
+    if (match?.flight) setFlight(match.flight)
+    if (match?.phone) setPhone(match.phone)
+  }
 
   const waiting = entries.filter((e) => e.status === 'waiting')
 
   function submit() {
-    if (!name.trim()) return
+    if (!name.trim() || !flight) return
     add.mutate(
-      { eventId, memberName: name.trim(), phone: phone.trim() || null },
+      {
+        eventId,
+        memberName: name.trim(),
+        phone: phone.trim() || null,
+        flight,
+      },
       {
         onSuccess: () => {
           setName('')
           setPhone('')
+          setFlight('')
         },
       },
     )
@@ -63,9 +80,10 @@ export function WaitlistPanel({ eventId }: { eventId: string }) {
         <TextField
           label="Name"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => applyName(e.target.value)}
           placeholder="Member name"
         />
+        <FlightField value={flight} onChange={setFlight} />
         <TextField
           label="Phone"
           type="tel"
@@ -77,7 +95,7 @@ export function WaitlistPanel({ eventId }: { eventId: string }) {
         <Button
           variant="secondary"
           onClick={submit}
-          disabled={!name.trim() || add.isPending}
+          disabled={!name.trim() || !flight || add.isPending}
         >
           <Plus className="size-5" aria-hidden />
           Add to standby

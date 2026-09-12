@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import type { Flight } from '@/lib/flights'
 import type {
   ContactInput,
   DashboardData,
@@ -83,8 +84,9 @@ export function useAddPlayer() {
     eventId: string
     memberName: string
     phone: string | null
-  }>(({ eventId, memberName, phone }) =>
-    store.addPlayer(eventId, memberName, phone),
+    flight?: Flight | null
+  }>(({ eventId, memberName, phone, flight }) =>
+    store.addPlayer(eventId, memberName, phone, flight),
   )
 }
 
@@ -115,6 +117,7 @@ function useWaitlistMutation<TInput>(fn: (input: TInput) => WaitlistEntry[]) {
     onSuccess: () => {
       // Waitlist size shows on the event card, so the dashboard refreshes too.
       client.invalidateQueries({ queryKey: WAITLIST_KEY })
+      client.invalidateQueries({ queryKey: MEMBERS_KEY })
       client.invalidateQueries({ queryKey: DASHBOARD_KEY })
     },
   })
@@ -125,8 +128,9 @@ export function useAddWaitlistEntry() {
     eventId: string
     memberName: string
     phone: string | null
-  }>(({ eventId, memberName, phone }) =>
-    store.addWaitlistEntry(eventId, memberName, phone),
+    flight?: Flight | null
+  }>(({ eventId, memberName, phone, flight }) =>
+    store.addWaitlistEntry(eventId, memberName, phone, flight),
   )
 }
 

@@ -4,6 +4,7 @@ import type { EventRecord } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Card, Pill } from '@/components/ui/card'
 import { FieldPanel } from '@/components/field-panel'
+import { FirstTeeField } from '@/components/first-tee-field'
 import { TeeSheetBuilder } from '@/components/tee-sheet-builder'
 import { WaitlistPanel } from '@/components/waitlist-panel'
 import { usePatchEvent } from '@/data/hooks'
@@ -74,12 +75,6 @@ function TournamentCard({
               {event.groupsHeld}
             </span>
           ) : null}
-          {event.firstTeeTime ? (
-            <span>
-              <span className="text-ink-soft">First tee: </span>
-              {event.firstTeeTime}
-            </span>
-          ) : null}
           <span>
             <span className="text-ink-soft">
               {event.ratePaid != null ? 'Rate paid: ' : 'Rate quoted: '}
@@ -90,6 +85,10 @@ function TournamentCard({
             <Users className="size-4 text-ink-soft" aria-hidden />
             {event.waitlistCount} on standby
           </span>
+        </div>
+
+        <div className="max-w-xs">
+          <FirstTeeField event={event} />
         </div>
 
         {!past ? (

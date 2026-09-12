@@ -7,8 +7,14 @@ export const FLIGHT_IDS = [
   'senior_b',
   'senior_c',
   'senior_d',
-  'family',
-  'wounded',
+  'family_a',
+  'family_b',
+  'family_c',
+  'family_d',
+  'wounded_a',
+  'wounded_b',
+  'wounded_c',
+  'wounded_d',
 ] as const
 
 export type Flight = (typeof FLIGHT_IDS)[number]
@@ -28,8 +34,14 @@ export const FLIGHTS: {
   { id: 'senior_b', label: 'Senior Flight B', group: 'senior' },
   { id: 'senior_c', label: 'Senior Flight C', group: 'senior' },
   { id: 'senior_d', label: 'Senior Flight D', group: 'senior' },
-  { id: 'family', label: 'Family', group: 'family' },
-  { id: 'wounded', label: 'Wounded', group: 'wounded' },
+  { id: 'family_a', label: 'Family Flight A', group: 'family' },
+  { id: 'family_b', label: 'Family Flight B', group: 'family' },
+  { id: 'family_c', label: 'Family Flight C', group: 'family' },
+  { id: 'family_d', label: 'Family Flight D', group: 'family' },
+  { id: 'wounded_a', label: 'Wounded Veteran Flight A', group: 'wounded' },
+  { id: 'wounded_b', label: 'Wounded Veteran Flight B', group: 'wounded' },
+  { id: 'wounded_c', label: 'Wounded Veteran Flight C', group: 'wounded' },
+  { id: 'wounded_d', label: 'Wounded Veteran Flight D', group: 'wounded' },
 ]
 
 export const FLIGHT_GROUPS: { id: FlightGroup | 'all'; label: string }[] = [
@@ -37,7 +49,7 @@ export const FLIGHT_GROUPS: { id: FlightGroup | 'all'; label: string }[] = [
   { id: 'veteran', label: 'Veteran' },
   { id: 'senior', label: 'Senior' },
   { id: 'family', label: 'Family' },
-  { id: 'wounded', label: 'Wounded' },
+  { id: 'wounded', label: 'Wounded Veteran' },
 ]
 
 const BY_ID = new Map(FLIGHTS.map((flight) => [flight.id, flight]))

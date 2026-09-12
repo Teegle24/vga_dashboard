@@ -3,6 +3,7 @@ import { Search, X } from 'lucide-react'
 import type { EventRecord, Member, Player, WaitlistEntry } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { FlightField } from '@/components/flight-field'
 import { SelectField, TextField } from '@/components/ui/field'
 import { useAddMember, usePatchMember } from '@/data/hooks'
 import { formatDate, isPast } from '@/lib/dates'
@@ -120,18 +121,7 @@ export function MembersDirectory({
             onChange={(e) => setName(e.target.value)}
             autoComplete="name"
           />
-          <SelectField
-            label="Flight"
-            value={flight}
-            onChange={(e) => setFlight((e.target.value || '') as Flight | '')}
-          >
-            <option value="">Choose a flight</option>
-            {FLIGHTS.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.label}
-              </option>
-            ))}
-          </SelectField>
+          <FlightField value={flight} onChange={setFlight} />
           <TextField
             label="Phone"
             value={phone}

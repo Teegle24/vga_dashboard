@@ -19,7 +19,7 @@ import {
   seedPlayers,
   seedWaitlist,
 } from '@/data/seed'
-import { isFlight } from '@/lib/flights'
+import { isFlight, type Flight } from '@/lib/flights'
 import { todayInIdaho } from '@/lib/dates'
 import { currentStateCode } from '@/lib/state'
 
@@ -64,12 +64,18 @@ function hasRoster(value: StoreState): boolean {
   )
 }
 
+function normalizeFlight(flight: unknown) {
+  if (flight === 'family') return 'family_a'
+  if (flight === 'wounded') return 'wounded_a'
+  return isFlight(flight) ? flight : null
+}
+
 function normalizeStore(value: StoreState): StoreState {
   return {
     ...value,
     members: value.members.map((member) => ({
       ...member,
-      flight: isFlight(member.flight) ? member.flight : null,
+      flight: normalizeFlight(member.flight),
     })),
   }
 }
@@ -227,6 +233,7 @@ export function addPlayer(
   eventId: string,
   memberName: string,
   phone: string | null,
+  flight?: Flight | null,
 ): Player[] {
   const s = load()
   s.players.push({
@@ -235,7 +242,7 @@ export function addPlayer(
     memberName,
     phone,
   })
-  ensureMember(memberName, phone)
+  ensureMember(memberName, phone, flight)
   save()
   return listPlayers(eventId)
 }
@@ -292,6 +299,7 @@ export function addWaitlistEntry(
   eventId: string,
   memberName: string,
   phone: string | null,
+  flight?: Flight | null,
 ): WaitlistEntry[] {
   const s = load()
   const existing = listWaitlist(eventId)
@@ -304,7 +312,7 @@ export function addWaitlistEntry(
     email: null,
     status: 'waiting',
   })
-  ensureMember(memberName, phone)
+  ensureMember(memberName, phone, flight)
   save()
   return listWaitlist(eventId)
 }
@@ -356,16 +364,25 @@ export function listMembers(): Member[] {
     .sort((a, b) => a.name.localeCompare(b.name))
 }
 
-function ensureMember(name: string, phone: string | null) {
+function ensureMember(
+  name: string,
+  phone: string | null,
+  flight?: Flight | null,
+) {
   const s = load()
   const key = name.trim().toLowerCase()
-  if (s.members.some((m) => m.name.toLowerCase() === key)) return
+  const existing = s.members.find((m) => m.name.toLowerCase() === key)
+  if (existing) {
+    if (phone) existing.phone = phone
+    if (flight && isFlight(flight)) existing.flight = flight
+    return
+  }
   s.members.push({
     id: `mem-${Date.now()}`,
     name: name.trim(),
     phone,
     city: null,
-    flight: null,
+    flight: flight && isFlight(flight) ? flight : null,
   })
 }
 

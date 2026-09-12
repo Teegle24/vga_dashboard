@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { FileDown, Save } from 'lucide-react'
 import type { EventRecord, TeeGroup } from '@/types'
 import { Button } from '@/components/ui/button'
+import { FirstTeeField } from '@/components/first-tee-field'
 import { usePatchEvent } from '@/data/hooks'
 import { downloadTeeSheet, groupsForEvent } from '@/lib/tee-sheet'
 
@@ -48,6 +49,12 @@ export function TeeSheetBuilder({ event }: { event: EventRecord }) {
 
   return (
     <div className="grid gap-4">
+      <div className="max-w-xs">
+        <FirstTeeField
+          event={event}
+          hint="The rest of the sheet follows this time."
+        />
+      </div>
       <p className="text-base text-ink-soft">
         Foursomes off the first tee. Names can stay blank until
         the roster is set in Golf Genius — then download and email the course.

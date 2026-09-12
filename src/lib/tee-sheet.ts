@@ -59,6 +59,18 @@ export function groupsForEvent(event: EventRecord): TeeGroup[] {
   return generateTeeGroups(count, event.firstTeeTime ?? DEFAULT_START)
 }
 
+/** Keep the names in each foursome; slide the times to a new first tee. */
+export function retimedGroups(
+  groups: TeeGroup[],
+  firstTeeTime: string,
+): TeeGroup[] {
+  const start = parseMinutes(toInputTime(firstTeeTime || DEFAULT_START))
+  return groups.map((group, i) => ({
+    ...group,
+    teeTime: formatTeeTime(start + i * INTERVAL_MINUTES),
+  }))
+}
+
 export function downloadTeeSheet(event: EventRecord) {
   const groups = groupsForEvent(event)
   const filled = groups.reduce(

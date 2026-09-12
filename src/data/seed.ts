@@ -135,8 +135,8 @@ export const seedWaitlist: WaitlistEntry[] = WAITLIST_SEEDS.map(
 
 function seedFlight(name: string, index: number): Flight {
   if (name === 'Mark Brinkman') return 'veteran_a'
-  if (name === 'Stan Collett') return 'wounded'
-  if (name === 'Vic Romero') return 'family'
+  if (name === 'Stan Collett') return 'wounded_a'
+  if (name === 'Vic Romero') return 'family_a'
   return FLIGHT_IDS[index % FLIGHT_IDS.length]
 }
 
