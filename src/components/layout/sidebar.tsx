@@ -25,7 +25,7 @@ const ITEMS: {
   { id: 'plan', label: 'Plan', hint: 'What needs doing', icon: ClipboardList },
   { id: 'tournaments', label: 'Tournaments', hint: 'Dates and tee sheets', icon: Flag },
   { id: 'courses', label: 'Courses', hint: 'Contacts and rates', icon: Landmark },
-  { id: 'members', label: 'Members', hint: 'The field', icon: Users },
+  { id: 'members', label: 'Members', hint: 'Flights and the field', icon: Users },
   { id: 'history', label: 'History', hint: 'Played rounds and rates', icon: ScrollText },
 ]
 

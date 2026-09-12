@@ -15,6 +15,7 @@ import {
   slugify,
 } from '@/data/idaho-seed'
 import { todayInIdaho } from '@/lib/dates'
+import { FLIGHT_IDS, type Flight } from '@/lib/flights'
 
 /**
  * The directory everyone starts from, built out of the Idaho seed list. Dates
@@ -132,6 +133,13 @@ export const seedWaitlist: WaitlistEntry[] = WAITLIST_SEEDS.map(
   },
 )
 
+function seedFlight(name: string, index: number): Flight {
+  if (name === 'Mark Brinkman') return 'veteran_a'
+  if (name === 'Stan Collett') return 'wounded'
+  if (name === 'Vic Romero') return 'family'
+  return FLIGHT_IDS[index % FLIGHT_IDS.length]
+}
+
 export const seedMembers: Member[] = (() => {
   const seen = new Set<string>()
   const members: Member[] = []
@@ -145,6 +153,7 @@ export const seedMembers: Member[] = (() => {
       name,
       phone,
       city,
+      flight: seedFlight(name, members.length),
     })
   }
 

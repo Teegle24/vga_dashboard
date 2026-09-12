@@ -5,6 +5,7 @@ import type { DashboardData } from '@/types'
 import { Button } from '@/components/ui/button'
 import { FeedbackButton } from '@/components/feedback-button'
 import { resetDemoData } from '@/data/store'
+import { flightLabel } from '@/lib/flights'
 import { downloadCsv } from '@/lib/tee-sheet'
 
 function exportEverything(data: DashboardData) {
@@ -60,8 +61,13 @@ function exportEverything(data: DashboardData) {
   downloadCsv('vga-idaho-tournaments.csv', eventRows)
 
   const memberRows = [
-    ['Name', 'Phone', 'City'],
-    ...data.members.map((m) => [m.name, m.phone ?? '', m.city ?? '']),
+    ['Name', 'Flight', 'Phone', 'City'],
+    ...data.members.map((m) => [
+      m.name,
+      m.flight ? flightLabel(m.flight) : '',
+      m.phone ?? '',
+      m.city ?? '',
+    ]),
   ]
   downloadCsv('vga-idaho-members.csv', memberRows)
 }

@@ -3,21 +3,37 @@ import { Search, X } from 'lucide-react'
 import type { EventRecord, Member, Player, WaitlistEntry } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { TextField } from '@/components/ui/field'
-import { useAddMember } from '@/data/hooks'
+import { SelectField, TextField } from '@/components/ui/field'
+import { useAddMember, usePatchMember } from '@/data/hooks'
 import { formatDate, isPast } from '@/lib/dates'
+import {
+  FLIGHT_GROUPS,
+  FLIGHTS,
+  flightGroup,
+  flightLabel,
+  flightSortIndex,
+  type Flight,
+  type FlightGroup,
+} from '@/lib/flights'
 import { formatPhone, telHref } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
-function filterMembers(members: Member[], query: string): Member[] {
+function filterMembers(
+  members: Member[],
+  query: string,
+  group: FlightGroup | 'all',
+): Member[] {
   const q = query.trim().toLowerCase()
-  if (!q) return members
-  return members.filter(
-    (m) =>
+  return members.filter((m) => {
+    if (group !== 'all' && flightGroup(m.flight) !== group) return false
+    if (!q) return true
+    return (
       m.name.toLowerCase().includes(q) ||
       (m.city ?? '').toLowerCase().includes(q) ||
-      (m.phone ?? '').includes(q),
-  )
+      (m.phone ?? '').includes(q) ||
+      flightLabel(m.flight).toLowerCase().includes(q)
+    )
+  })
 }
 
 function memberRounds(
@@ -58,30 +74,36 @@ export function MembersDirectory({
 }) {
   const add = useAddMember()
   const [query, setQuery] = useState('')
+  const [group, setGroup] = useState<FlightGroup | 'all'>('all')
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [city, setCity] = useState('')
+  const [flight, setFlight] = useState<Flight | ''>('')
 
   const visible = useMemo(() => {
-    const sorted = members
-      .slice()
-      .sort((a, b) => a.name.localeCompare(b.name))
-    return filterMembers(sorted, query)
-  }, [members, query])
+    const sorted = members.slice().sort((a, b) => {
+      const byFlight = flightSortIndex(a.flight) - flightSortIndex(b.flight)
+      if (byFlight !== 0) return byFlight
+      return a.name.localeCompare(b.name)
+    })
+    return filterMembers(sorted, query, group)
+  }, [members, query, group])
 
   function submit() {
-    if (!name.trim()) return
+    if (!name.trim() || !flight) return
     add.mutate(
       {
         name: name.trim(),
         phone: phone.trim() || null,
         city: city.trim() || null,
+        flight,
       },
       {
         onSuccess: () => {
           setName('')
           setPhone('')
           setCity('')
+          setFlight('')
         },
       },
     )
@@ -98,6 +120,18 @@ export function MembersDirectory({
             onChange={(e) => setName(e.target.value)}
             autoComplete="name"
           />
+          <SelectField
+            label="Flight"
+            value={flight}
+            onChange={(e) => setFlight((e.target.value || '') as Flight | '')}
+          >
+            <option value="">Choose a flight</option>
+            {FLIGHTS.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.label}
+              </option>
+            ))}
+          </SelectField>
           <TextField
             label="Phone"
             value={phone}
@@ -112,10 +146,28 @@ export function MembersDirectory({
             autoComplete="address-level2"
           />
         </div>
-        <Button onClick={submit} disabled={add.isPending || !name.trim()}>
+        <Button onClick={submit} disabled={add.isPending || !name.trim() || !flight}>
           Save member
         </Button>
       </Card>
+
+      <div className="flex flex-wrap gap-2">
+        {FLIGHT_GROUPS.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => setGroup(item.id)}
+            className={cn(
+              'min-h-12 rounded-md px-4 text-base font-semibold',
+              group === item.id
+                ? 'bg-forest text-white'
+                : 'border border-input bg-white/70 text-ink hover:bg-white',
+            )}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
 
       <div className="relative">
         <Search
@@ -126,7 +178,7 @@ export function MembersDirectory({
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Type a name or town"
+          placeholder="Type a name, town, or flight"
           aria-label="Find a member"
           className={cn(
             'w-full min-h-16 rounded-lg border border-input bg-white/70 text-lg text-ink',
@@ -147,7 +199,7 @@ export function MembersDirectory({
       </div>
 
       <p className="text-base text-ink-soft">
-        {query.trim()
+        {query.trim() || group !== 'all'
           ? visible.length === 1
             ? '1 matching member'
             : `${visible.length} matching members`
@@ -156,8 +208,8 @@ export function MembersDirectory({
 
       {visible.length === 0 ? (
         <p className="rounded-lg border border-border bg-card px-4 py-5 text-base text-ink-soft">
-          {query.trim()
-            ? `No member matches “${query}”.`
+          {query.trim() || group !== 'all'
+            ? 'No member matches that search.'
             : 'Nobody on the list yet. Add the first member above.'}
         </p>
       ) : (
@@ -178,6 +230,9 @@ export function MembersDirectory({
                     <h3 className="text-xl font-semibold text-ink">
                       {member.name}
                     </h3>
+                    <p className="text-base font-medium text-brand">
+                      {flightLabel(member.flight)}
+                    </p>
                     <p className="text-base text-ink-soft">
                       {member.city ?? 'City not listed'}
                     </p>
@@ -192,6 +247,10 @@ export function MembersDirectory({
                   ) : (
                     <span className="text-base text-ink-soft">No phone</span>
                   )}
+                </div>
+
+                <div className="mt-4 max-w-sm">
+                  <MemberFlightSelect member={member} />
                 </div>
 
                 {rounds.length === 0 ? (
@@ -222,5 +281,29 @@ export function MembersDirectory({
         </div>
       )}
     </div>
+  )
+}
+
+function MemberFlightSelect({ member }: { member: Member }) {
+  const patch = usePatchMember()
+
+  return (
+    <SelectField
+      label="Flight"
+      value={member.flight ?? ''}
+      onChange={(e) =>
+        patch.mutate({
+          id: member.id,
+          patch: { flight: (e.target.value || null) as Flight | null },
+        })
+      }
+    >
+      <option value="">No flight yet</option>
+      {FLIGHTS.map((item) => (
+        <option key={item.id} value={item.id}>
+          {item.label}
+        </option>
+      ))}
+    </SelectField>
   )
 }

@@ -1,5 +1,9 @@
 /** The shape of everything in the directory. */
 
+import type { Flight } from '@/lib/flights'
+
+export type { Flight }
+
 export type StateCode = 'ID'
 
 /** Where a row came from. `sample` rows are demo data and say so in the UI. */
@@ -92,6 +96,7 @@ export interface Member {
   name: string
   phone: string | null
   city: string | null
+  flight: Flight | null
 }
 
 export interface DashboardData {
@@ -128,4 +133,5 @@ export interface NewMemberInput {
   name: string
   phone: string | null
   city: string | null
+  flight: Flight | null
 }

@@ -4,6 +4,7 @@ import type {
   DashboardData,
   EventRecord,
   FeedbackInput,
+  Member,
   NewEventInput,
   NewMemberInput,
   WaitlistEntry,
@@ -164,6 +165,13 @@ export function useAllWaitlist() {
 
 export function useAddMember() {
   return useDashboardMutation<NewMemberInput>((input) => store.addMember(input))
+}
+
+export function usePatchMember() {
+  return useDashboardMutation<{
+    id: string
+    patch: Partial<Pick<Member, 'flight' | 'phone' | 'city'>>
+  }>(({ id, patch }) => store.patchMember(id, patch))
 }
 
 export function useSendFeedback() {

@@ -135,7 +135,7 @@ export function Dashboard() {
             <section>
               <SectionHeading
                 title="Members"
-                description="Everyone on file, plus who is already on a tournament or waiting on standby."
+                description="Who plays in which flight, and who is already on a tournament or waiting on standby."
               />
               <MembersDirectory
                 members={data?.members ?? []}

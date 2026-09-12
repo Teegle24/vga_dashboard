@@ -4,11 +4,13 @@ import { Button } from '@/components/ui/button'
 import { TextField } from '@/components/ui/field'
 import {
   useAddWaitlistEntry,
+  useMembers,
   usePatchWaitlistEntry,
   usePromoteToField,
   useRemoveWaitlistEntry,
   useWaitlist,
 } from '@/data/hooks'
+import { flightForName, flightLabel } from '@/lib/flights'
 import { formatPhone, telHref } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
@@ -22,6 +24,7 @@ const ACTION =
  */
 export function WaitlistPanel({ eventId }: { eventId: string }) {
   const { data: entries = [], isLoading } = useWaitlist(eventId)
+  const { data: members = [] } = useMembers()
   const add = useAddWaitlistEntry()
   const patch = usePatchWaitlistEntry()
   const promote = usePromoteToField()
@@ -113,6 +116,11 @@ export function WaitlistPanel({ eventId }: { eventId: string }) {
                       </span>
                     ) : null}
                   </span>
+                  {flightForName(members, entry.memberName) ? (
+                    <span className="block truncate text-sm text-ink-soft">
+                      {flightLabel(flightForName(members, entry.memberName))}
+                    </span>
+                  ) : null}
                   {entry.phone ? (
                     <a
                       href={telHref(entry.phone) ?? undefined}

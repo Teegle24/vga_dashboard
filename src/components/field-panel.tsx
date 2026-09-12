@@ -4,10 +4,12 @@ import { Button } from '@/components/ui/button'
 import { TextField } from '@/components/ui/field'
 import {
   useAddPlayer,
+  useMembers,
   useMovePlayerToStandby,
   usePlayers,
   useRemovePlayer,
 } from '@/data/hooks'
+import { flightForName, flightLabel } from '@/lib/flights'
 import { formatPhone, telHref } from '@/lib/format'
 
 const ACTION =
@@ -21,6 +23,7 @@ export function FieldPanel({
   spotsHeld: number | null
 }) {
   const { data: players = [], isLoading } = usePlayers(eventId)
+  const { data: members = [] } = useMembers()
   const add = useAddPlayer()
   const remove = useRemovePlayer()
   const toStandby = useMovePlayerToStandby()
@@ -104,6 +107,11 @@ export function FieldPanel({
                 <span className="block truncate text-base font-medium text-ink">
                   {player.memberName}
                 </span>
+                {flightForName(members, player.memberName) ? (
+                  <span className="block truncate text-sm text-ink-soft">
+                    {flightLabel(flightForName(members, player.memberName))}
+                  </span>
+                ) : null}
                 {player.phone ? (
                   <a
                     href={telHref(player.phone) ?? undefined}

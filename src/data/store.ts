@@ -19,6 +19,7 @@ import {
   seedPlayers,
   seedWaitlist,
 } from '@/data/seed'
+import { isFlight } from '@/lib/flights'
 import { todayInIdaho } from '@/lib/dates'
 import { currentStateCode } from '@/lib/state'
 
@@ -28,7 +29,7 @@ import { currentStateCode } from '@/lib/state'
  * before showing someone new.
  */
 
-const STORAGE_KEY = 'vga-dashboard.v4'
+const STORAGE_KEY = 'vga-dashboard.v5'
 
 /** Whoever is driving the demo. Becomes a real signed-in user later. */
 export const CURRENT_DIRECTOR = 'Mark Brinkman'
@@ -63,6 +64,16 @@ function hasRoster(value: StoreState): boolean {
   )
 }
 
+function normalizeStore(value: StoreState): StoreState {
+  return {
+    ...value,
+    members: value.members.map((member) => ({
+      ...member,
+      flight: isFlight(member.flight) ? member.flight : null,
+    })),
+  }
+}
+
 function load(): StoreState {
   if (state && hasRoster(state)) return state
   try {
@@ -70,7 +81,7 @@ function load(): StoreState {
     if (raw) {
       const parsed = JSON.parse(raw) as StoreState
       if (hasRoster(parsed)) {
-        state = parsed
+        state = normalizeStore(parsed)
         return state
       }
     }
@@ -354,6 +365,7 @@ function ensureMember(name: string, phone: string | null) {
     name: name.trim(),
     phone,
     city: null,
+    flight: null,
   })
 }
 
@@ -367,16 +379,34 @@ export function addMember(input: NewMemberInput): DashboardData {
     if (existing) {
       existing.phone = input.phone ?? existing.phone
       existing.city = input.city ?? existing.city
+      if (input.flight) existing.flight = input.flight
     } else {
       s.members.push({
         id: `mem-${Date.now()}`,
         name,
         phone: input.phone,
         city: input.city,
+        flight: input.flight,
       })
     }
     save()
   }
+  return getDashboard()
+}
+
+export function patchMember(
+  id: string,
+  patch: Partial<Pick<Member, 'flight' | 'phone' | 'city'>>,
+): DashboardData {
+  const s = load()
+  const member = s.members.find((m) => m.id === id)
+  if (!member) throw new Error('Member not found')
+  if (patch.phone !== undefined) member.phone = patch.phone
+  if (patch.city !== undefined) member.city = patch.city
+  if (patch.flight !== undefined) {
+    member.flight = patch.flight && isFlight(patch.flight) ? patch.flight : null
+  }
+  save()
   return getDashboard()
 }
 

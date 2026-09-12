@@ -1,4 +1,9 @@
-import type { InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'react'
+import type {
+  InputHTMLAttributes,
+  ReactNode,
+  SelectHTMLAttributes,
+  TextareaHTMLAttributes,
+} from 'react'
 import { useId } from 'react'
 import { cn } from '@/lib/utils'
 
@@ -38,6 +43,31 @@ export function TextField({ label, hint, className, ...props }: TextFieldProps) 
         {label}
       </Label>
       <input id={id} className={cn(CONTROL, className)} {...props} />
+    </div>
+  )
+}
+
+interface SelectFieldProps extends SelectHTMLAttributes<HTMLSelectElement> {
+  label: string
+  hint?: string
+}
+
+export function SelectField({
+  label,
+  hint,
+  className,
+  children,
+  ...props
+}: SelectFieldProps) {
+  const id = useId()
+  return (
+    <div className="grid gap-2">
+      <Label htmlFor={id} hint={hint}>
+        {label}
+      </Label>
+      <select id={id} className={cn(CONTROL, className)} {...props}>
+        {children}
+      </select>
     </div>
   )
 }
