@@ -83,32 +83,6 @@ body {
   );
 }
 
-body::before,
-body::after {
-  content: '';
-  pointer-events: none;
-  position: fixed;
-  z-index: 0;
-}
-
-body::before {
-  top: 1.25rem;
-  right: 1.25rem;
-  width: 5.5rem;
-  height: 5.5rem;
-  border-top: 2px solid rgba(37, 99, 235, 0.35);
-  border-right: 2px solid rgba(37, 99, 235, 0.35);
-}
-
-body::after {
-  bottom: 1.25rem;
-  right: 1.25rem;
-  width: 5.5rem;
-  height: 5.5rem;
-  border-bottom: 2px solid rgba(193, 41, 46, 0.32);
-  border-right: 2px solid rgba(193, 41, 46, 0.32);
-}
-
 h1,
 h2,
 h3,
