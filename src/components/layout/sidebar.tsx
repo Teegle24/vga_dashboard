@@ -59,7 +59,7 @@ export function Sidebar({
         <p className="mt-4 font-display text-xl font-semibold tracking-tight">
           VGA Idaho
         </p>
-        <div className="mt-2 h-0.5 w-12 bg-brand" aria-hidden />
+        <div className="mt-2 h-0.5 w-12 bg-flare" aria-hidden />
         <p className="mt-2 text-sm text-white/65">Tournament desk</p>
       </div>
 
@@ -89,7 +89,7 @@ export function Sidebar({
                     <span
                       className={cn(
                         'inline-flex min-w-6 items-center justify-center rounded-full px-1.5 py-0.5 text-xs font-bold',
-                        selected ? 'bg-brand text-white' : 'bg-brand text-white',
+                        'bg-flare text-white',
                       )}
                     >
                       {badge}
@@ -114,7 +114,7 @@ export function Sidebar({
         <p className="text-sm text-white/50">Director</p>
         <p className="text-base text-white/90">{CURRENT_DIRECTOR}</p>
       </div>
-      <div className="h-0.5 bg-brand lg:hidden" aria-hidden />
+      <div className="h-0.5 bg-flare lg:hidden" aria-hidden />
     </aside>
   )
 }

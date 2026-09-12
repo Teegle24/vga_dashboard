@@ -20,6 +20,8 @@
   --color-accent-soft: var(--gold-soft);
   --color-gold: var(--gold);
   --color-gold-soft: var(--gold-soft);
+  --color-flare: var(--flare);
+  --color-flare-soft: var(--flare-soft);
   --color-forest: var(--forest);
   --color-forest-2: var(--forest-2);
   --color-ink: var(--ink);
@@ -40,6 +42,8 @@
   --brand-soft: rgba(37, 99, 235, 0.12);
   --gold: #2563eb;
   --gold-soft: rgba(37, 99, 235, 0.12);
+  --flare: #c1292e;
+  --flare-soft: rgba(193, 41, 46, 0.12);
 
   --canvas: #e8eef6;
   --card: #ffffff;
@@ -101,8 +105,8 @@ body::after {
   right: 1.25rem;
   width: 5.5rem;
   height: 5.5rem;
-  border-bottom: 2px solid rgba(37, 99, 235, 0.28);
-  border-right: 2px solid rgba(37, 99, 235, 0.28);
+  border-bottom: 2px solid rgba(193, 41, 46, 0.32);
+  border-right: 2px solid rgba(193, 41, 46, 0.32);
 }
 
 h1,

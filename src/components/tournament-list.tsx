@@ -49,7 +49,7 @@ function TournamentCard({
     (isAlertDue(event.eventDate) && !event.alertSentAt)
 
   return (
-    <Card className={cn('p-0', highlight ? 'border-gold' : undefined)}>
+    <Card className={cn('p-0', highlight ? 'border-flare' : undefined)}>
       <div className="grid gap-4 p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0">

@@ -53,13 +53,13 @@ export function Pill({
 }) {
   const tones = {
     neutral: 'bg-muted text-ink-soft',
-    due: 'bg-gold-soft text-ink',
+    due: 'bg-flare-soft text-ink',
     done: 'bg-brand-soft text-brand',
   } as const
 
   const dots = {
     neutral: 'bg-ink-soft/40',
-    due: 'bg-gold',
+    due: 'bg-flare',
     done: 'bg-brand',
   } as const
 

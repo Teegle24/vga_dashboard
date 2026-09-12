@@ -21,7 +21,7 @@ export function Flourish({ className }: { className?: string }) {
         stroke="currentColor"
         strokeWidth="1.6"
       />
-      <circle cx="60" cy="5" r="2.2" fill="currentColor" />
+      <circle cx="60" cy="5" r="2.2" className="fill-flare" />
     </svg>
   )
 }
