@@ -140,7 +140,7 @@ export function PlanBoard({
                 key={event.id}
                 type="button"
                 onClick={() => onOpenTournament(event.id)}
-                className="flex min-h-16 w-full items-center justify-between gap-4 rounded-lg border border-border bg-card px-5 py-4 text-left hover:bg-muted"
+                className="flex min-h-16 w-full items-center justify-between gap-4 rounded-lg border border-border bg-card px-5 py-4 text-left backdrop-blur-md hover:bg-muted"
               >
                 <span className="min-w-0">
                   <span className="block truncate text-lg font-semibold text-ink">
@@ -202,7 +202,7 @@ function ActionRow({
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full items-start gap-4 rounded-lg border border-gold/40 bg-gold-soft px-5 py-4 text-left hover:bg-white/50"
+      className="flex w-full items-start gap-4 rounded-lg border border-gold/35 bg-gold-soft px-5 py-4 text-left backdrop-blur-md hover:bg-white/35"
     >
       <span className="mt-0.5 text-brand" aria-hidden>
         {icon}

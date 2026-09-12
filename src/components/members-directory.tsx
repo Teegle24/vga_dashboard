@@ -161,7 +161,7 @@ export function MembersDirectory({
               'min-h-12 rounded-md px-4 text-base font-semibold',
               group === item.id
                 ? 'bg-forest text-white'
-                : 'border border-input bg-white/70 text-ink hover:bg-white',
+                : 'border border-input bg-white/35 text-ink backdrop-blur-sm hover:bg-white/55',
             )}
           >
             {item.label}
@@ -181,7 +181,7 @@ export function MembersDirectory({
           placeholder="Type a name, town, or flight"
           aria-label="Find a member"
           className={cn(
-            'w-full min-h-16 rounded-lg border border-input bg-white/70 text-lg text-ink',
+            'w-full min-h-16 rounded-lg border border-input bg-white/35 text-lg text-ink backdrop-blur-sm',
             'placeholder:text-ink-soft/70 focus:border-brand',
           )}
           style={{ paddingLeft: '3.25rem', paddingRight: '3.25rem' }}

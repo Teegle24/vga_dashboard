@@ -49,7 +49,7 @@ export function WaitlistPanel({ eventId }: { eventId: string }) {
   }
 
   return (
-    <div className="grid min-w-0 gap-4 rounded-lg border border-border bg-white/35 p-4">
+    <div className="grid min-w-0 gap-4 rounded-lg border border-border bg-white/20 p-4 backdrop-blur-md">
       <h4 className="text-lg font-semibold text-ink">
         Standby list
         {waiting.length ? (
@@ -95,7 +95,7 @@ export function WaitlistPanel({ eventId }: { eventId: string }) {
           {entries.map((entry, index) => (
             <li
               key={entry.id}
-              className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-2 rounded-md bg-white/50 px-2.5 py-2"
+              className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-2 rounded-md bg-white/30 px-2.5 py-2"
             >
               <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-soft text-sm font-semibold text-brand">
                 {entry.rank}

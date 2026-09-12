@@ -8,7 +8,7 @@ import { useId } from 'react'
 import { cn } from '@/lib/utils'
 
 const CONTROL =
-  'w-full min-h-14 rounded-md border border-input bg-white/70 px-4 text-base text-ink ' +
+  'w-full min-h-14 rounded-md border border-input bg-white/35 px-4 text-base text-ink backdrop-blur-sm ' +
   'placeholder:text-ink-soft/60 focus:border-brand'
 
 export function Label({

@@ -37,7 +37,7 @@ function EventHistory({
       {past.map((event) => (
         <li
           key={event.id}
-          className="flex flex-wrap items-center justify-between gap-3 rounded-md bg-white px-3 py-3"
+          className="flex flex-wrap items-center justify-between gap-3 rounded-md bg-white/40 px-3 py-3 backdrop-blur-sm"
         >
           <span className="min-w-0">
             <span className="block text-base font-medium text-ink">
@@ -125,7 +125,7 @@ function CourseRow({
         <div className="grid gap-6 border-t border-border px-5 py-6">
           <ContactCard course={course} />
 
-          <div className="grid gap-4 rounded-lg border border-border bg-white/35 p-4">
+          <div className="grid gap-4 rounded-lg border border-border bg-white/20 p-4 backdrop-blur-md">
             <h4 className="text-lg font-semibold text-ink">Hold a date here</h4>
             <HoldDateForm course={course} />
           </div>
