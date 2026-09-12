@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Bell, Check, ChevronDown, FileSpreadsheet, Users } from 'lucide-react'
+import { Bell, CalendarPlus, Check, ChevronDown, FileSpreadsheet, Users } from 'lucide-react'
 import type { EventRecord } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Card, Pill } from '@/components/ui/card'
@@ -180,9 +180,11 @@ function TournamentCard({
 export function TournamentList({
   events,
   openId,
+  onHoldNewDate,
 }: {
   events: EventRecord[]
   openId?: string | null
+  onHoldNewDate?: () => void
 }) {
   const upcoming = events
     .filter((e) => !isPast(e.eventDate))
@@ -190,11 +192,16 @@ export function TournamentList({
 
   if (upcoming.length === 0) {
     return (
-      <Card>
+      <Card className="grid gap-4">
         <p className="text-base text-ink-soft">
-          No dates held yet. Open Courses, call the contact, and hold a date
-          there.
+          No dates held yet. Pick a course and schedule the tournament there.
         </p>
+        {onHoldNewDate ? (
+          <Button onClick={onHoldNewDate}>
+            <CalendarPlus className="size-5" aria-hidden />
+            Hold a new date
+          </Button>
+        ) : null}
       </Card>
     )
   }

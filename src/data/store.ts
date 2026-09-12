@@ -280,18 +280,18 @@ export function promoteToField(waitlistId: string): {
   const s = load()
   const entry = s.waitlist.find((w) => w.id === waitlistId)
   if (!entry) throw new Error('Waitlist entry not found')
-  addPlayer(entry.eventId, entry.memberName, entry.phone)
-  entry.status = 'filled'
-  save()
+  const eventId = entry.eventId
+  addPlayer(eventId, entry.memberName, entry.phone)
+  removeWaitlistEntry(waitlistId)
   return {
-    players: listPlayers(entry.eventId),
-    waitlist: listWaitlist(entry.eventId),
+    players: listPlayers(eventId),
+    waitlist: listWaitlist(eventId),
   }
 }
 
 export function listWaitlist(eventId: string): WaitlistEntry[] {
   return load()
-    .waitlist.filter((w) => w.eventId === eventId)
+    .waitlist.filter((w) => w.eventId === eventId && w.status === 'waiting')
     .sort((a, b) => a.rank - b.rank)
 }
 

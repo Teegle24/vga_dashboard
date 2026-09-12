@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { CalendarPlus } from 'lucide-react'
 import { useAllPlayers, useAllWaitlist, useDashboard } from '@/data/hooks'
 import { CourseDirectory } from '@/components/course-directory'
 import { CourseSearch, filterCourses } from '@/components/course-search'
@@ -12,6 +13,7 @@ import {
   Sidebar,
   type DashboardTab,
 } from '@/components/layout/sidebar'
+import { Button } from '@/components/ui/button'
 import { Card, SectionHeading } from '@/components/ui/card'
 import { isAlertDue, isHeadcountDue, isPast } from '@/lib/dates'
 
@@ -23,6 +25,7 @@ export function Dashboard() {
   const [query, setQuery] = useState('')
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [openTournamentId, setOpenTournamentId] = useState<string | null>(null)
+  const [scheduleHint, setScheduleHint] = useState(false)
 
   const noticeCount = useMemo(() => {
     const upcoming = (data?.events ?? []).filter((e) => !isPast(e.eventDate))
@@ -49,6 +52,11 @@ export function Dashboard() {
   function openTournament(id: string) {
     setOpenTournamentId(id)
     openTab('tournaments')
+  }
+
+  function goToSchedule() {
+    setScheduleHint(true)
+    openTab('courses')
   }
 
   return (
@@ -80,11 +88,18 @@ export function Dashboard() {
             <section>
               <SectionHeading
                 title="Tournaments"
-                description="Hold the times, build the tee sheet, then alert the field 3–5 days out."
+                description="Hold the times, build the tee sheet, then alert the field 3–5 days out. Pick the course first — that is where you schedule."
+                action={
+                  <Button onClick={goToSchedule}>
+                    <CalendarPlus className="size-5" aria-hidden />
+                    Hold a new date
+                  </Button>
+                }
               />
               <TournamentList
                 events={data?.events ?? []}
                 openId={openTournamentId}
+                onHoldNewDate={goToSchedule}
               />
             </section>
           ) : null}
@@ -93,8 +108,19 @@ export function Dashboard() {
             <section>
               <SectionHeading
                 title="Course directory"
-                description="Who to call, what they charged last time, and a place to hold the next date."
+                description="Who to call, what they charged last time, and where you schedule the next tournament."
               />
+              {scheduleHint ? (
+                <Card className="mb-5">
+                  <p className="text-xl font-semibold text-ink">
+                    Schedule a tournament here
+                  </p>
+                  <p className="mt-2 text-base text-ink-soft">
+                    Open a course, call the contact, then use the form inside
+                    to hold the date. It will show up under Tournaments.
+                  </p>
+                </Card>
+              ) : null}
               <CourseSearch
                 query={query}
                 onQueryChange={(value) => {
@@ -112,7 +138,7 @@ export function Dashboard() {
                       ? visibleCourses.length === 1
                         ? '1 matching course'
                         : `${visibleCourses.length} matching courses`
-                      : `${visibleCourses.length} Idaho courses. Tap one to open the contact.`}
+                      : `${visibleCourses.length} Idaho courses. Open one to schedule a tournament or see the contact.`}
                   </p>
                   {visibleCourses.length === 0 ? (
                     <p className="rounded-lg border border-border bg-card px-4 py-5 text-base text-ink-soft">
@@ -123,7 +149,10 @@ export function Dashboard() {
                       courses={visibleCourses}
                       events={data?.events ?? []}
                       expandedId={expandedId}
-                      onExpand={setExpandedId}
+                      onExpand={(id) => {
+                        setExpandedId(id)
+                        if (id) setScheduleHint(false)
+                      }}
                     />
                   )}
                 </div>

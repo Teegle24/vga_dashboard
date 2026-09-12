@@ -66,8 +66,9 @@ export function HoldDateForm({
   return (
     <div className="grid gap-4">
       <p className="text-base text-ink-soft">
-        Call {course.contact.contactName ?? 'the course'}, then record the date
-        and tee times they will hold for the field.
+        This is where you schedule a tournament. Call{' '}
+        {course.contact.contactName ?? 'the course'}, then write down the date
+        and tee times they will hold.
       </p>
 
       <div className="grid gap-4 sm:grid-cols-2">

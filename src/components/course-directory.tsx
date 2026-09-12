@@ -126,7 +126,9 @@ function CourseRow({
           <ContactCard course={course} />
 
           <div className="grid gap-4 rounded-lg border border-border bg-muted p-4">
-            <h4 className="text-lg font-semibold text-ink">Hold a date here</h4>
+            <h4 className="text-lg font-semibold text-ink">
+              Schedule a tournament here
+            </h4>
             <HoldDateForm course={course} />
           </div>
 

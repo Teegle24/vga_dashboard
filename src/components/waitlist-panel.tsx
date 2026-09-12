@@ -104,13 +104,13 @@ export function WaitlistPanel({ eventId }: { eventId: string }) {
 
       {isLoading ? (
         <p className="text-base text-ink-soft">Loading…</p>
-      ) : entries.length === 0 ? (
+      ) : waiting.length === 0 ? (
         <p className="text-base text-ink-soft">
           Nobody on standby yet. Add the first person above.
         </p>
       ) : (
         <ol className="grid gap-2">
-          {entries.map((entry, index) => (
+          {waiting.map((entry, index) => (
             <li
               key={entry.id}
               className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-2 rounded-md bg-white px-2.5 py-2"
@@ -123,16 +123,6 @@ export function WaitlistPanel({ eventId }: { eventId: string }) {
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-base font-medium text-ink">
                     {entry.memberName}
-                    {entry.status === 'filled' ? (
-                      <span className="ml-2 text-sm font-normal text-brand">
-                        got the spot
-                      </span>
-                    ) : null}
-                    {entry.status === 'declined' ? (
-                      <span className="ml-2 text-sm font-normal text-ink-soft">
-                        passed
-                      </span>
-                    ) : null}
                   </span>
                   {flightForName(members, entry.memberName) ? (
                     <span className="block truncate text-sm text-ink-soft">
@@ -162,7 +152,7 @@ export function WaitlistPanel({ eventId }: { eventId: string }) {
                   <button
                     type="button"
                     aria-label={`Move ${entry.memberName} down`}
-                    disabled={index === entries.length - 1}
+                    disabled={index === waiting.length - 1}
                     onClick={() =>
                       patch.mutate({ id: entry.id, direction: 'down' })
                     }
